@@ -7,8 +7,8 @@ class Grid:
         self.left = self.margin
         self.width = app.width - 2*self.margin
         self.height = app.height - self.top - self.margin
-        self.rows = 20
-        self.cols = 20
+        self.rows = 15
+        self.cols = 15
 
 # CITATION: general structure for drawing grid from: CS Academy 5.3.2 Drawing a 2d Board
 def getCellSize(app):
