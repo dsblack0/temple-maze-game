@@ -10,6 +10,7 @@ class Grid:
         self.rows = 20
         self.cols = 20
 
+# CITATION: general structure for drawing grid from: CS Academy 5.3.2 Drawing a 2d Board
 def getCellSize(app):
     cellW = app.grid.width / app.grid.cols
     cellH = app.grid.height / app.grid.rows
@@ -27,8 +28,9 @@ def drawCell(app, r, c):
     cellX0, cellY0 = getCellLeftTop(app, r, c)
     cellW, cellH = getCellSize(app)
 
+    color = None
     drawRect(cellX0, cellY0, cellW, cellH, 
-             fill=None, border='black')
+             fill=color, border='black')
 
 def drawGridBorder(app):
     drawRect(app.grid.left, app.grid.top, app.grid.width, app.grid.height,
