@@ -13,7 +13,7 @@ def onAppStart(app):
 def restartGame(app):
     app.mainChar = characters.MainChar(0, 0)
     app.monsters = characters.generateMonsters(2, [])
-    app.stepsPerSecond = 5
+    app.stepsPerSecond = 10
     app.timer = 0
     app.gameOver = False
     app.paused = False
@@ -26,6 +26,7 @@ def checkForCapture(app):
 
 def onStep(app):
     if not app.gameOver and not app.paused:
+        app.timer += 1
         for monster in app.monsters:
             monster.moveOnStep()
         checkForCapture(app)

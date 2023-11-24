@@ -58,18 +58,19 @@ class MainChar(Character):
             self.row, self.col = ogLocation
 
 class Monster(Character):
+    speed = 2
     def __init__(self, r, c):
         super().__init__(r, c)
-        self.speed = 1
         self.image = images.monster
 
     def moveOnStep(self):
-        direction = random.choice(['left', 'right', 'up', 'down'])
-        ogLocation = self.row, self.col
-        self.move(direction)
-        if not Monster.validLocation(self):
-            self.row, self.col = ogLocation
-            self.moveOnStep()
+        if app.timer % (app.stepsPerSecond/Monster.speed) == 0.0:
+            direction = random.choice(['left', 'right', 'up', 'down'])
+            ogLocation = self.row, self.col
+            self.move(direction)
+            if not Monster.validLocation(self):
+                self.row, self.col = ogLocation
+                self.moveOnStep()
 
 def generateMonsters(count, monsters):
     if len(monsters) == count:
