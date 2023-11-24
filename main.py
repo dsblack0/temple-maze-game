@@ -13,6 +13,7 @@ def onAppStart(app):
 def restartGame(app):
     app.mainChar = characters.MainChar(0, 0)
     app.monsters = characters.generateMonsters(2, [])
+    app.artifacts = characters.generateArtifacts(3, [])
     app.stepsPerSecond = 10
     app.timer = 0
     app.gameOver = False
@@ -45,6 +46,8 @@ def redrawAll(app):
         app.mainChar.draw()
         for monster in app.monsters:
             monster.draw()
+        for artifact in app.artifacts:
+            artifact.draw()
     elif app.gameOver:
         guides.drawGameOver(app)
 

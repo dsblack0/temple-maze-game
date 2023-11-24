@@ -81,3 +81,18 @@ def generateMonsters(count, monsters):
         if Monster.validLocation(newMonster):
             monsters.append(newMonster)
         return generateMonsters(count, monsters)
+    
+class Artifact(Character):
+    def __init__(self, r, c):
+        super().__init__(r, c)
+        self.image = random.choice(images.artifacts)
+
+def generateArtifacts(count, artifacts):
+    if len(artifacts) == count:
+        return artifacts
+    else:
+        r, c = random.randrange(app.grid.rows), random.randrange(app.grid.cols)
+        newArtifact = Artifact(r,c)
+        if Artifact.validLocation(newArtifact):
+            artifacts.append(newArtifact)
+        return generateArtifacts(count, artifacts)
