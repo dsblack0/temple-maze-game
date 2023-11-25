@@ -40,25 +40,44 @@ class MainChar(Character):
     
     def onKeyPress(self, key):
         ogLocation = self.row, self.col
+        # pick up artifact when press 'space'
+        if key == 'space':
+            for artifact in app.placedArtifacts:
+                if self.row == artifact.row and self.col == artifact.col:
+                    app.heldArtifacts.append(artifact)
+                    app.placedArtifacts.remove(artifact)
+        # move mainChar & held artifacts with direction keys            
         self.move(key)
+        for artifact in app.heldArtifacts:
+            artifact.row, artifact.col = self.row, self.col
+        # undo move if not valid location
         if not MainChar.validLocation(self):
             self.row, self.col = ogLocation
+            for artifact in app.heldArtifacts:
+                artifact.row, artifact.col = ogLocation
 
     def onKeyHold(self, keys):
         ogLocation = self.row, self.col
+        key = None
         if 'left' in keys:
-            self.col -= 1
+            key = 'left'
         elif 'right' in keys:
-            self.col += 1
+            key = 'right'
         elif 'up' in keys:
-            self.row -= 1
+            key = 'up'
         elif 'down' in keys:
-            self.row += 1
+            key = 'down'
+        if key:
+            self.move(key)
+            for artifact in app.heldArtifacts:
+                artifact.row, artifact.col = self.row, self.col
         if not MainChar.validLocation(self):
             self.row, self.col = ogLocation
+            for artifact in app.heldArtifacts:
+                artifact.row, artifact.col = ogLocation
 
 class Monster(Character):
-    speed = 2
+    speed = 1
     def __init__(self, r, c):
         super().__init__(r, c)
         self.image = images.monster
@@ -72,7 +91,7 @@ class Monster(Character):
                 self.row, self.col = ogLocation
                 self.moveOnStep()
 
-def generateMonsters(count, monsters):
+def generateMonsters(count, monsters = []):
     if len(monsters) == count:
         return monsters
     else:
@@ -87,7 +106,7 @@ class Artifact(Character):
         super().__init__(r, c)
         self.image = random.choice(images.artifacts)
 
-def generateArtifacts(count, artifacts):
+def generateArtifacts(count, artifacts=[]):
     if len(artifacts) == count:
         return artifacts
     else:

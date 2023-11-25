@@ -12,9 +12,10 @@ def onAppStart(app):
 
 def restartGame(app):
     app.mainChar = characters.MainChar(0, 0)
-    app.monsters = characters.generateMonsters(2, [])
-    app.artifacts = characters.generateArtifacts(3, [])
-    app.stepsPerSecond = 10
+    app.monsters = characters.generateMonsters(2)
+    app.placedArtifacts = characters.generateArtifacts(3)
+    app.heldArtifacts = []
+    app.stepsPerSecond = 5
     app.timer = 0
     app.gameOver = False
     app.paused = False
@@ -31,6 +32,8 @@ def onStep(app):
         for monster in app.monsters:
             monster.moveOnStep()
         checkForCapture(app)
+        if len(app.placedArtifacts) < 2:
+            characters.generateArtifacts(2)
 
 def onKeyPress(app, key):
     if not app.gameOver and not app.paused:
@@ -46,7 +49,9 @@ def redrawAll(app):
         app.mainChar.draw()
         for monster in app.monsters:
             monster.draw()
-        for artifact in app.artifacts:
+        for artifact in app.placedArtifacts:
+            artifact.draw()
+        for artifact in app.heldArtifacts:
             artifact.draw()
     elif app.gameOver:
         guides.drawGameOver(app)
