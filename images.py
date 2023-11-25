@@ -1,12 +1,15 @@
 from cmu_graphics import *
 from PIL import Image
 
+# CITATION: https://www.models-resource.com/resources/big_icons/21/20777.png?updated=1501277066
 mainChar = Image.open('images/mainChar.png')
 mainChar = CMUImage(mainChar)
 
+# CITATION: https://dragoart.com/tut/how-to-draw-an-evil-demon-monkey-from-temple-run-17074
 monster = Image.open('images/monster.png')
 monster = CMUImage(monster)
 
+# CITATION: https://solaralberta.ca/2021/06/25/religion-culture-and-the-sun/
 artifact1 = Image.open('images/artifact1.png')
 artifact1 = CMUImage(artifact1)
 
@@ -19,6 +22,7 @@ artifact3 = CMUImage(artifact3)
 artifact4 = Image.open('images/artifact4.png')
 artifact4 = CMUImage(artifact4)
 
+# CITATION: https://www.facebook.com/TempleRun/posts/by-popular-demand-the-idol-image-from-yesterday-in-wallpaper-size-for-your-devic/1041864785863780/
 idol1 = Image.open('images/idol1.png')
 idol1 = CMUImage(idol1)
 
