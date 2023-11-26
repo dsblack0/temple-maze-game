@@ -43,14 +43,13 @@ class MainChar(Character):
         # pick up artifact when press 'space'
         if key == 'space':
             if self.row == 0 and self.col == 0:
-                for artifact in app.heldArtifacts:
-                    artifactWeight = Artifact.weights[artifact.image]
-                    app.droppedWeight += artifactWeight
-                    app.heldWeight -= artifactWeight
-                    app.heldArtifacts.remove(artifact)
-                    if app.droppedWeight >= 10:
-                        app.droppedWeight -= 10
-                        app.score += 1
+                droppedArtifact = app.heldArtifacts.pop()
+                artifactWeight = Artifact.weights[droppedArtifact.image]
+                app.droppedWeight += artifactWeight
+                app.heldWeight -= artifactWeight
+                if app.droppedWeight >= 10:
+                    app.droppedWeight -= 10
+                    app.score += 1
             else:
                 for artifact in app.placedArtifacts:
                     artifactWeight = Artifact.weights[artifact.image]

@@ -1,9 +1,19 @@
 from cmu_graphics import *
+import images
+
+class Button:
+    pass
+
+def drawBackground(app):
+    pass
 
 def drawGameStart(app):
     pass
 
 def drawInstructions(app):
+    pass
+
+def pauseScreen(app):
     pass
 
 def drawScoreBox(app):
