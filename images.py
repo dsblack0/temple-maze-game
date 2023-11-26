@@ -9,6 +9,10 @@ mainChar = CMUImage(mainChar)
 monster = Image.open('images/monster.png')
 monster = CMUImage(monster)
 
+# CITATION: https://www.eventprophire.com/product/wooden-mine-cart/
+cart = Image.open('images/cart.png')
+cart = CMUImage(cart)
+
 # CITATION: https://solaralberta.ca/2021/06/25/religion-culture-and-the-sun/
 artifact1 = Image.open('images/artifact1.png')
 artifact1 = CMUImage(artifact1)

@@ -2,6 +2,7 @@ from cmu_graphics import *
 import maze
 import characters
 import guides
+import images
 
 def onAppStart(app):
     app.width = 800
@@ -15,10 +16,15 @@ def restartGame(app):
     app.monsters = characters.generateMonsters(2)
     app.placedArtifacts = characters.generateArtifacts(3)
     app.heldArtifacts = []
+
     app.stepsPerSecond = 5
     app.timer = 0
     app.gameOver = False
     app.paused = False
+
+    app.score = 0
+    app.droppedWeight = 0
+    app.heldWeight = 0
 
 def checkForCapture(app):
     for monster in app.monsters:
@@ -46,6 +52,7 @@ def onKeyHold(app, keys):
 def redrawAll(app):
     if not app.gameOver and not app.paused:
         maze.drawGrid(app)
+        guides.drawScoreBox(app)
         app.mainChar.draw()
         for monster in app.monsters:
             monster.draw()
