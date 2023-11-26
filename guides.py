@@ -42,6 +42,7 @@ def drawScoreBox(app):
 
 
 def drawGameOver(app):
-    drawRect(0, 0, app.width, app.height, fill='saddleBrown')
+    drawBackground(app)
     drawLabel("Game Over", app.width/2, app.height/2, 
-              fill='tan', size=100)
+              fill='saddleBrown', size=100)
+    app.restart.draw()

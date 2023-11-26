@@ -42,8 +42,6 @@ def drawCart(app):
     width, height = getCellSize(app)
     drawImage(images.cart, posX, posY, align='top-left',
               width=width, height=height)
-
-
     
 def drawGrid(app):
     for r in range(app.grid.rows):

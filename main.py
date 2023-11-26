@@ -55,6 +55,9 @@ def onMousePress(app, mx, my):
     if not app.gameOver:
         if app.pause.pressButton(mx, my):
             app.paused = not app.paused
+    else:
+        if app.restart.pressButton(mx, my):
+            restartGame(app)
 
 def onKeyHold(app, keys):
     if not app.gameOver and not app.paused:
