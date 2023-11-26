@@ -2,8 +2,12 @@ from cmu_graphics import *
 from PIL import Image
 
 # CITATION: https://www.istockphoto.com/photos/desert-ground
-background = Image.open('images/background-copy.jpg')
-background = CMUImage(background)
+background1 = Image.open('images/background1.jpg')
+background1 = CMUImage(background1)
+
+# CITATION: https://www.123rf.com/photo_17362040_old-temple-brick-wall.html
+walls = Image.open('images/walls.jpg')
+walls = CMUImage(walls)
 
 # CITATION: https://www.models-resource.com/resources/big_icons/21/20777.png?updated=1501277066
 mainChar = Image.open('images/mainChar.png')

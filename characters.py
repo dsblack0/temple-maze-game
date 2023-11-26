@@ -10,13 +10,13 @@ class Character:
         self.width, self.height = maze.getCellSize(app)
     
     @staticmethod
-    def validLocation(char):
-        if isinstance(char, MainChar):
-            return ((0<=char.row<app.grid.rows) and
-                    (0<=char.col<app.grid.cols))
-        else:
-            return ((3<=char.row<app.grid.rows) and
-                    (3<=char.col<app.grid.cols))
+    def validLocations():
+        validLocations = []
+        for row in range(4, app.grid.rows):
+            for col in range(4, app.grid.cols):
+                if app.grid.maze[row][col] == True:
+                    validLocations.append((row, col))
+        return validLocations
         
     def move(self, direction):
         if direction == 'left':
@@ -37,6 +37,15 @@ class MainChar(Character):
     def __init__(self, r, c):
         super().__init__(r, c)
         self.image = images.mainChar
+
+    @staticmethod
+    def validLocations():
+        validLocations = []
+        for row in range(app.grid.rows):
+                for col in range(app.grid.cols):
+                    if app.grid.maze[row][col] == True:
+                        validLocations.append((row, col))
+        return validLocations
     
     def onKeyPress(self, key):
         ogLocation = self.row, self.col
@@ -65,7 +74,7 @@ class MainChar(Character):
         for artifact in app.heldArtifacts:
             artifact.row, artifact.col = self.row, self.col
         # undo move if not valid location
-        if not MainChar.validLocation(self):
+        if (self.row, self.col) not in MainChar.validLocations():
             self.row, self.col = ogLocation
             for artifact in app.heldArtifacts:
                 artifact.row, artifact.col = ogLocation
@@ -85,7 +94,7 @@ class MainChar(Character):
             self.move(key)
             for artifact in app.heldArtifacts:
                 artifact.row, artifact.col = self.row, self.col
-        if not MainChar.validLocation(self):
+        if (self.row, self.col) not in MainChar.validLocations():
             self.row, self.col = ogLocation
             for artifact in app.heldArtifacts:
                 artifact.row, artifact.col = ogLocation
@@ -96,23 +105,24 @@ class Monster(Character):
         super().__init__(r, c)
         self.image = images.monster
 
-    def moveOnStep(self):
+    def moveOnStep(self, directions):
         if app.timer % (app.stepsPerSecond/Monster.speed) == 0.0:
-            direction = random.choice(['left', 'right', 'up', 'down'])
+            direction = random.choice(directions)
             ogLocation = self.row, self.col
             self.move(direction)
-            if not Monster.validLocation(self):
+            if (self.row, self.col) not in Monster.validLocations():
                 self.row, self.col = ogLocation
-                self.moveOnStep()
+                directions.remove(direction)
+                self.moveOnStep(directions)
 
 def generateMonsters(count, monsters = []):
     if len(monsters) == count:
         return monsters
     else:
-        r, c = random.randrange(app.grid.rows), random.randrange(app.grid.cols)
+        validLocations = Monster.validLocations()
+        r, c = random.choice(validLocations)
         newMonster = Monster(r,c)
-        if Monster.validLocation(newMonster):
-            monsters.append(newMonster)
+        monsters.append(newMonster)
         return generateMonsters(count, monsters)
     
 class Artifact(Character):
@@ -135,8 +145,8 @@ def generateArtifacts(count, artifacts=[]):
     if len(artifacts) == count:
         return artifacts
     else:
-        r, c = random.randrange(app.grid.rows), random.randrange(app.grid.cols)
+        validLocations = Artifact.validLocations()
+        r, c = random.choice(validLocations)
         newArtifact = Artifact(r,c)
-        if Artifact.validLocation(newArtifact):
-            artifacts.append(newArtifact)
+        artifacts.append(newArtifact)
         return generateArtifacts(count, artifacts)

@@ -1,5 +1,6 @@
 from cmu_graphics import *
 import images
+import random
 
 class Grid:
     def __init__(self):
@@ -10,6 +11,20 @@ class Grid:
         self.height = app.height - self.top - self.margin
         self.rows = 15
         self.cols = 15
+        self.maze = self.generateMaze()
+
+    def generateMaze(self):
+        maze = [[True]*self.cols for _ in range(self.rows)]
+
+        for row in range(self.rows):
+            if row % 2 == 1:
+                maze[row] = [False] * self.cols
+            if row % 4 == 1:
+                maze[row][self.cols-1] = True
+            elif row % 4 == 3:
+                maze[row][0] = True
+        
+        return maze
 
 # CITATION: general structure for drawing grid from: CS Academy 5.3.2 Drawing a 2d Board
 def getCellSize(app):
@@ -29,9 +44,12 @@ def drawCell(app, r, c):
     cellX0, cellY0 = getCellLeftTop(app, r, c)
     cellW, cellH = getCellSize(app)
 
-    color = None
-    drawRect(cellX0, cellY0, cellW, cellH, 
-             fill=color, border='saddleBrown')
+    if app.grid.maze[r][c] == False:
+        drawImage(images.walls, cellX0, cellY0, 
+                  width=cellW, height=cellH, align='top-left')
+    else:
+        drawRect(cellX0, cellY0, cellW, cellH, 
+                fill=None, border='saddleBrown')
 
 def drawGridBorder(app):
     drawRect(app.grid.left, app.grid.top, app.grid.width, app.grid.height,

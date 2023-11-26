@@ -39,7 +39,7 @@ def onStep(app):
     if not app.gameOver and not app.paused and not app.showInstructions:
         app.timer += 1
         for monster in app.monsters:
-            monster.moveOnStep()
+            monster.moveOnStep(['left', 'right', 'up', 'down'])
         checkForCapture(app)
         if len(app.placedArtifacts) < 2:
             characters.generateArtifacts(2)

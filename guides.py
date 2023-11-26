@@ -2,7 +2,7 @@ from cmu_graphics import *
 import images, buttons
 
 def drawBackground(app):
-    drawImage(images.background, 0, 0,
+    drawImage(images.background1, 0, 0,
               width=app.width, height=app.height)
 
 def drawInGameButtons(app):
