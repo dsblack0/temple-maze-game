@@ -42,7 +42,8 @@ class MainChar(Character):
         ogLocation = self.row, self.col
         # pick up artifact when press 'space'
         if key == 'space':
-            if self.row == 0 and self.col == 0:
+            if ((self.row == 0) and (self.col == 0) and
+                app.heldArtifacts != []):
                 droppedArtifact = app.heldArtifacts.pop()
                 artifactWeight = Artifact.weights[droppedArtifact.image]
                 app.droppedWeight += artifactWeight
@@ -128,7 +129,7 @@ class Artifact(Character):
             posX, posY = maze.getCellLeftTop(app, self.row, self.col)
             width, height = maze.getCellSize(app)
             drawLabel(Artifact.weights[self.image], posX+width/2, 
-                      posY+height/2, fill='tan', size=width/2, bold=True)
+                      posY+height/2, fill='saddleBrown', size=width/2, bold=True)
 
 def generateArtifacts(count, artifacts=[]):
     if len(artifacts) == count:

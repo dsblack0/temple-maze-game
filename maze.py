@@ -43,6 +43,8 @@ def drawCart(app):
     drawImage(images.cart, posX, posY, align='top-left',
               width=width, height=height)
 
+
+    
 def drawGrid(app):
     for r in range(app.grid.rows):
         for c in range(app.grid.cols):

@@ -1,14 +1,13 @@
 from cmu_graphics import *
-import maze
-import characters
-import guides
-import images
+import maze, characters, guides, images, buttons
+
 
 def onAppStart(app):
     app.width = 800
     app.height = 800
     app.grid = maze.Grid()
     app.setMaxShapeCount(100000)
+    app.highScore = 0
     restartGame(app)
 
 def restartGame(app):
@@ -16,11 +15,13 @@ def restartGame(app):
     app.monsters = characters.generateMonsters(2)
     app.placedArtifacts = characters.generateArtifacts(3)
     app.heldArtifacts = []
+    buttons.initializeButtons(app)
 
     app.stepsPerSecond = 5
     app.timer = 0
     app.gameOver = False
     app.paused = False
+    app.showInstructions = False
 
     app.score = 0
     app.droppedWeight = 0
@@ -31,9 +32,11 @@ def checkForCapture(app):
         if ((monster.row == app.mainChar.row) and
             (monster.col == app.mainChar.col)):
             app.gameOver = True
+            if app.score > app.highScore:
+                app.highScore = app.score
 
 def onStep(app):
-    if not app.gameOver and not app.paused:
+    if not app.gameOver and not app.paused and not app.showInstructions:
         app.timer += 1
         for monster in app.monsters:
             monster.moveOnStep()
@@ -42,17 +45,31 @@ def onStep(app):
             characters.generateArtifacts(2)
 
 def onKeyPress(app, key):
-    if not app.gameOver and not app.paused:
+    if not app.gameOver and not app.paused and not app.showInstructions:
         app.mainChar.onKeyPress(key)
+
+def onMousePress(app, mx, my):
+    if not app.gameOver and not app.paused:
+        if app.instructions.pressButton(mx, my):
+            app.showInstructions = not app.showInstructions
+    if not app.gameOver:
+        if app.pause.pressButton(mx, my):
+            app.paused = not app.paused
 
 def onKeyHold(app, keys):
     if not app.gameOver and not app.paused:
         app.mainChar.onKeyHold(keys)
 
 def redrawAll(app):
-    if not app.gameOver and not app.paused:
+    guides.drawBackground(app)
+    guides.drawInGameButtons(app)
+    guides.drawScoreBox(app)
+    if app.paused:
+        guides.drawPauseScreen(app)
+    elif app.showInstructions:
+        guides.drawInstructions(app)
+    elif not app.gameOver and not app.paused:
         maze.drawGrid(app)
-        guides.drawScoreBox(app)
         app.mainChar.draw()
         for monster in app.monsters:
             monster.draw()
