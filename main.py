@@ -7,15 +7,20 @@ def onAppStart(app):
     app.height = 800
     app.setMaxShapeCount(100000)
     app.highScore = 0
-    restartGame(app)
+
+    app.gameStarted = False
+    app.gameOver = False
+    app.paused = True
+    app.showInstructions = False
+    buttons.initializeButtons(app)
 
 def restartGame(app):
+    app.gameStarted = True
     app.grid = maze.Grid()
     app.mainChar = characters.MainChar(0, 0)
     app.monsters = characters.generateMonsters(2)
     app.placedArtifacts = characters.generateArtifacts(3)
     app.heldArtifacts = []
-    buttons.initializeButtons(app)
 
     app.stepsPerSecond = 5
     app.timer = 0
@@ -49,14 +54,21 @@ def onKeyPress(app, key):
         app.mainChar.onKeyPress(key)
 
 def onMousePress(app, mx, my):
+    if not app.gameStarted:
+        if app.instructions.pressButton(mx, my):
+            app.showInstructions = not app.showInstructions
+        elif app.startGame.pressButton(mx, my):
+            restartGame(app)
     if not app.gameOver and not app.paused:
         if app.instructions.pressButton(mx, my):
             app.showInstructions = not app.showInstructions
     if not app.gameOver:
         if app.pause.pressButton(mx, my):
             app.paused = not app.paused
+        if app.restartInGame.pressButton(mx, my):
+            app.gameStarted = False
     else:
-        if app.restart.pressButton(mx, my):
+        if app.restartEndGame.pressButton(mx, my):
             restartGame(app)
 
 def onKeyHold(app, keys):
@@ -64,24 +76,27 @@ def onKeyHold(app, keys):
         app.mainChar.onKeyHold(keys)
 
 def redrawAll(app):
-    guides.drawBackground(app)
-    guides.drawInGameButtons(app)
-    guides.drawScoreBox(app)
-    if app.paused:
-        guides.drawPauseScreen(app)
-    elif app.showInstructions:
-        guides.drawInstructions(app)
-    elif not app.gameOver and not app.paused:
-        maze.drawGrid(app)
-        app.mainChar.draw()
-        for monster in app.monsters:
-            monster.draw()
-        for artifact in app.placedArtifacts:
-            artifact.draw()
-        for artifact in app.heldArtifacts:
-            artifact.draw()
+    if not app.gameStarted:
+        guides.drawGameStart(app)
+        if app.showInstructions:
+            guides.drawInstructions(app)
     elif app.gameOver:
         guides.drawGameOver(app)
+    else:
+        guides.drawInGame(app)
+        if app.paused:
+            guides.drawPauseScreen(app)
+        if app.showInstructions:
+            guides.drawInstructions(app)
+        else:
+            maze.drawGrid(app)
+            app.mainChar.draw()
+            for monster in app.monsters:
+                monster.draw()
+            for artifact in app.placedArtifacts:
+                artifact.draw()
+            for artifact in app.heldArtifacts:
+                artifact.draw()
 
 def main():
     runApp()

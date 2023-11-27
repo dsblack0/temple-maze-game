@@ -34,4 +34,6 @@ class Button:
 def initializeButtons(app):
     app.pause = Button(app.width-100, 20+app.height/24, app.width/30, '||', 'circle')
     app.instructions = Button(app.width-100, 20+app.height/8, app.width/30, 'I', 'circle')
-    app.restart = Button(app.width/2, app.height/2+200, 50, 'Restart', 'rect')
+    app.restartEndGame = Button(app.width/2, app.height/2+200, 50, 'Restart', 'rect')
+    app.restartInGame = Button(app.width/4, app.height/12+20, 50, 'Restart', 'rect')
+    app.startGame = Button(app.width/2, app.height/2+200, 50, 'Start', 'rect')

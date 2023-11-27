@@ -1,6 +1,6 @@
 from cmu_graphics import *
-import images
 import random
+import images
 
 class Grid:
     def __init__(self):
@@ -25,10 +25,9 @@ class Grid:
         else:
             directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
             random.shuffle(directions)
-            print(directions)
             for drow, dcol in directions:
                 nextRow, nextCol = currRow+drow, currCol+dcol
-                print(nextRow, nextCol)
+                print('Generating Maze...')
                 if ((0<=nextRow<self.rows) and (0<=nextCol<self.cols) and
                     (maze[nextRow][nextCol] == False)):
                         maze[currRow][currCol] = True

@@ -1,26 +1,44 @@
 from cmu_graphics import *
 import images, buttons
 
-def drawBackground(app):
-    drawImage(images.background1, 0, 0,
+def drawBackground(app, num):
+    if num == 1:
+        image = images.background1
+    else:
+        image = images.background2
+    drawImage(image, 0, 0,
               width=app.width, height=app.height)
 
 def drawInGameButtons(app):
     app.pause.draw()
     app.instructions.draw()
+    app.restartInGame.draw()
 
 def drawGameStart(app):
-    pass
+    drawBackground(app, 2)
+    drawLabel("Welcome to the", app.width/2, app.height/2-45, 
+              fill='saddleBrown', size=90, bold=True, font='monospace')
+    drawLabel("Temple Maze", app.width/2, app.height/2+45,
+              fill='saddleBrown', size=90, bold=True, font='monospace')
+    app.startGame.draw()
+    app.instructions.draw()
+
+def drawInGame(app):
+    drawBackground(app, 1)
+    drawInGameButtons(app)
+    drawScoreBox(app)
 
 def drawInstructions(app):
-    drawRect(0, app.width/5, app.width, app.height, fill='saddleBrown')
-    drawLabel("Instructions", app.width/2, app.height/2, 
-              fill='tan', size=100)
+    drawRect(0, app.height/5, app.width, app.height, fill='saddleBrown')
+    drawLabel('Instructions', app.width/2, app.height/4, 
+              fill='tan', size=50)
+    drawLabel('You have joined a group of temple robbers in their mission to steel artifacts from ancient temples.',
+              app.width/2, app.height/4+50, fill='tan', size=18)
 
 def drawPauseScreen(app):
-    drawRect(0, app.width/5, app.width, app.height, fill='saddleBrown')
-    drawLabel("Paused", app.width/2, app.height/2, 
-              fill='tan', size=100)
+    drawRect(0, app.height/5, app.width, app.height, fill='saddleBrown')
+    drawLabel('Paused', app.width/2, app.height/2, 
+              fill='tan', size=100, font='monospace')
 
 def drawScoreBox(app):
     drawRect(app.width-150, 20, app.width/4, app.height/6, 
@@ -42,7 +60,7 @@ def drawScoreBox(app):
 
 
 def drawGameOver(app):
-    drawBackground(app)
-    drawLabel("Game Over", app.width/2, app.height/2, 
-              fill='saddleBrown', size=100)
-    app.restart.draw()
+    drawBackground(app, 1)
+    drawLabel('Game Over', app.width/2, app.height/2, 
+              fill='saddleBrown', bold=True, size=100, font='monospace')
+    app.restartEndGame.draw()

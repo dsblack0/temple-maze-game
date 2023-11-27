@@ -5,6 +5,10 @@ from PIL import Image
 background1 = Image.open('images/background1.jpg')
 background1 = CMUImage(background1)
 
+# CITATION: https://en.wikipedia.org/wiki/Western_Wall_Tunnel
+background2 = Image.open('images/background2.jpg')
+background2 = CMUImage(background2)
+
 # CITATION: https://www.123rf.com/photo_17362040_old-temple-brick-wall.html
 walls = Image.open('images/walls.jpg')
 walls = CMUImage(walls)
