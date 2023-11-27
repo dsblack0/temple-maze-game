@@ -18,15 +18,15 @@ class Character:
                     validLocations.append((row, col))
         return validLocations
         
-    def move(self, direction):
+    def move(self, direction, speed):
         if direction == 'left':
-            self.col -= 1
+            self.col -= 1*speed
         elif direction == 'right':
-            self.col += 1
+            self.col += 1*speed
         elif direction == 'up':
-            self.row -= 1
+            self.row -= 1*speed
         elif direction == 'down':
-            self.row += 1
+            self.row += 1*speed
     
     def draw(self):
         posX, posY = maze.getCellLeftTop(app, self.row, self.col)
@@ -46,7 +46,7 @@ class MainChar(Character):
                     if app.grid.maze[row][col] == True:
                         validLocations.append((row, col))
         return validLocations
-    
+
     def onKeyPress(self, key):
         ogLocation = self.row, self.col
         # pick up artifact when press 'space'
@@ -70,7 +70,7 @@ class MainChar(Character):
                             app.heldWeight += artifactWeight
                             
         # move mainChar & held artifacts with direction keys            
-        self.move(key)
+        self.move(key, 1)
         for artifact in app.heldArtifacts:
             artifact.row, artifact.col = self.row, self.col
         # undo move if not valid location
@@ -91,7 +91,7 @@ class MainChar(Character):
         elif 'down' in keys:
             key = 'down'
         if key:
-            self.move(key)
+            self.move(key, 1)
             for artifact in app.heldArtifacts:
                 artifact.row, artifact.col = self.row, self.col
         if (self.row, self.col) not in MainChar.validLocations():
@@ -109,7 +109,7 @@ class Monster(Character):
         if app.timer % (app.stepsPerSecond/Monster.speed) == 0.0:
             direction = random.choice(directions)
             ogLocation = self.row, self.col
-            self.move(direction)
+            self.move(direction, 2)
             if (self.row, self.col) not in Monster.validLocations():
                 self.row, self.col = ogLocation
                 directions.remove(direction)

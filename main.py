@@ -5,12 +5,12 @@ import maze, characters, guides, images, buttons
 def onAppStart(app):
     app.width = 800
     app.height = 800
-    app.grid = maze.Grid()
     app.setMaxShapeCount(100000)
     app.highScore = 0
     restartGame(app)
 
 def restartGame(app):
+    app.grid = maze.Grid()
     app.mainChar = characters.MainChar(0, 0)
     app.monsters = characters.generateMonsters(2)
     app.placedArtifacts = characters.generateArtifacts(3)

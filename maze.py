@@ -14,17 +14,29 @@ class Grid:
         self.maze = self.generateMaze()
 
     def generateMaze(self):
-        maze = [[True]*self.cols for _ in range(self.rows)]
+        maze = [[False]*self.cols for _ in range(self.rows)]
+        maze[0][0] = True
+        return self.createMazePattern(maze, 0, 0, 0)
 
-        for row in range(self.rows):
-            if row % 2 == 1:
-                maze[row] = [False] * self.cols
-            if row % 4 == 1:
-                maze[row][self.cols-1] = True
-            elif row % 4 == 3:
-                maze[row][0] = True
-        
-        return maze
+    def createMazePattern(self, maze, n, currRow, currCol):
+        if n == 150:
+            return maze
+        else:
+            directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            random.shuffle(directions)
+            print(directions)
+            for drow, dcol in directions:
+                nextRow, nextCol = currRow+drow, currCol+dcol
+                print(nextRow, nextCol)
+                if ((0<=nextRow<self.rows) and (0<=nextCol<self.cols) and
+                    (maze[nextRow][nextCol] == False)):
+                        maze[currRow][currCol] = True
+                        maze[nextRow][nextCol] = True
+                        solution = self.createMazePattern(maze, n+1, nextRow, nextCol)
+                        if solution != None:
+                            return solution
+                        maze[nextRow][nextCol] = False
+            return None
 
 # CITATION: general structure for drawing grid from: CS Academy 5.3.2 Drawing a 2d Board
 def getCellSize(app):
