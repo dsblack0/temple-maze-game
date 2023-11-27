@@ -18,6 +18,7 @@ class Grid:
         maze[0][0] = True
         return self.createMazePattern(maze, 0, 0, 0)
 
+    # CITATION: Used code in Ruby as reference point from https://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
     def createMazePattern(self, maze, n, currRow, currCol):
         if n == 150:
             return maze
