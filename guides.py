@@ -1,5 +1,5 @@
 from cmu_graphics import *
-import images, buttons
+import images, powerups
 
 def drawBackground(app, num):
     if num == 1:
@@ -14,6 +14,24 @@ def drawInGameButtons(app):
     app.instructions.draw()
     app.restartInGame.draw()
 
+def drawPowerupBox(app):
+    drawRect(app.width/2, 20, app.width/6, app.height/6, 
+             fill='tan', align='top-right')
+    drawRect(app.width/2-5, 25, app.width/6-10, app.height/6-10, 
+             fill=None, border='saddleBrown', align='top-right')
+    app.invisPowerup.draw()
+    drawLabel(f'{powerups.Invis.name} x{powerups.Invis.count}',
+              app.width/3+42, 50, size=12, fill='saddleBrown', align='left')
+    drawImage(images.invis, app.width/3+25, 50, width=10, height=10, align='center')
+    app.wallPowerup.draw()
+    drawLabel(f'{powerups.WallWalk.name} x{powerups.WallWalk.count}',
+              app.width/3+42, 90, size=12, fill='saddleBrown', align='left')
+    drawImage(images.walls, app.width/3+25, 90, width=10, height=10, align='center')
+    app.openSpinner.draw()
+    drawLabel('Get Powerups!',
+              app.width/3+42, 130, size=12, fill='saddleBrown', align='left')
+    drawImage(images.spin, app.width/3+25, 130, width=10, height=10, align='center')
+
 def drawGameStart(app):
     drawBackground(app, 2)
     drawLabel("Welcome to the", app.width/2, app.height/2-45, 
@@ -26,6 +44,7 @@ def drawGameStart(app):
 def drawInGame(app):
     drawBackground(app, 1)
     drawInGameButtons(app)
+    drawPowerupBox(app)
     drawScoreBox(app)
 
 def drawInstructions(app):

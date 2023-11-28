@@ -1,7 +1,6 @@
 from cmu_graphics import *
 import random
-import images
-import maze
+import images, maze
 
 class Character:
     def __init__(self, r, c):
@@ -119,7 +118,7 @@ class Monster(Character):
         if app.timer % (app.stepsPerSecond/Monster.speed) == 0.0:
             direction = random.choice(directions)
             ogLocation = self.row, self.col
-            self.move(direction, 2)
+            self.move(direction, 1)
             if (self.row, self.col) not in Monster.validLocations():
                 # revert move if not valid
                 self.row, self.col = ogLocation

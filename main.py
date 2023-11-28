@@ -1,5 +1,5 @@
 from cmu_graphics import *
-import maze, characters, guides, images, buttons
+import maze, characters, guides, buttons, powerups
 
 
 def onAppStart(app):
@@ -13,6 +13,7 @@ def onAppStart(app):
     app.paused = True
     app.showInstructions = False
     buttons.initializeButtons(app)
+    app.powerups = [powerups.WallWalk(), powerups.Invis(), powerups.WallWalk()]
 
 def restartGame(app):
     app.gameStarted = True

@@ -13,6 +13,14 @@ background2 = CMUImage(background2)
 walls = Image.open('images/walls.jpg')
 walls = CMUImage(walls)
 
+# CITATION: https://templerun.fandom.com/wiki/Invincibility
+invis = Image.open('images/invis.png')
+invis = CMUImage(invis)
+
+# CITATION: https://stock.adobe.com/images/board-game-color-spinner-vector-illustration-icon-symbol-graphic/249920162
+spin = Image.open('images/spin.png')
+spin = CMUImage(spin)
+
 # CITATION: https://www.models-resource.com/resources/big_icons/21/20777.png?updated=1501277066
 mainChar = Image.open('images/mainChar.png')
 mainChar = CMUImage(mainChar)
