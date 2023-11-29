@@ -6,19 +6,23 @@ class Character:
     def __init__(self, r, c):
         self.row = r
         self.col = c
+        self.updatePosition()
         self.width, self.height = maze.getCellSize(app)
     
     @staticmethod
     def validLocations():
         validLocations = []
         # don't go through 3x3 top left corner
-        for row in range(4, app.grid.rows):
-            for col in range(4, app.grid.cols):
+        for row in range(2, app.grid.rows):
+            for col in range(2, app.grid.cols):
                 # create list of remainingvalid locations
                 if app.grid.maze[row][col] == True:
                     validLocations.append((row, col))
         return validLocations
         
+    def updatePosition(self):
+        self.posX, self.posY = maze.getCellLeftTop(app, self.row, self.col)
+
     def move(self, direction, speed):
         # move col & row based on direction
         if direction == 'left':
@@ -29,10 +33,10 @@ class Character:
             self.row -= 1*speed
         elif direction == 'down':
             self.row += 1*speed
+        self.updatePosition()
     
     def draw(self):
-        posX, posY = maze.getCellLeftTop(app, self.row, self.col)
-        drawImage(self.image, posX, posY, align='top-left',
+        drawImage(self.image, self.posX, self.posY, align='top-left',
                   width=self.width, height=self.height)
 
 class MainChar(Character):
@@ -66,6 +70,10 @@ class MainChar(Character):
                 if app.droppedWeight >= 10:
                     app.droppedWeight -= 10
                     app.score += 1
+            elif ((self.row == app.gem.row) and 
+                  (self.col == app.gem.col)):
+                    app.heldGems += 1
+                    app.gem = None
             else:
                 for artifact in app.placedArtifacts:
                     artifactWeight = Artifact.weights[artifact.image]
@@ -83,6 +91,7 @@ class MainChar(Character):
         # undo move if not valid location
         if (self.row, self.col) not in MainChar.validLocations():
             self.row, self.col = ogLocation
+            self.updatePosition()
             for artifact in app.heldArtifacts:
                 artifact.row, artifact.col = ogLocation
 
@@ -132,6 +141,7 @@ def generateMonsters(count, monsters = []):
         return monsters
     else:
         validLocations = Monster.validLocations()
+        print(validLocations)
         # randomly choose a valid location
         r, c = random.choice(validLocations)
         # create new monster placed at that location
@@ -168,3 +178,15 @@ def generateArtifacts(count, artifacts=[]):
         newArtifact = Artifact(r,c)
         artifacts.append(newArtifact)
         return generateArtifacts(count, artifacts)
+    
+class Gem(Character):
+    def __init__(self, r, c):
+        super().__init__(r, c)
+        self.image = images.gem
+
+def generateGem():
+        validLocations = Gem.validLocations()
+        # randomly choose a valid location
+        r, c = random.choice(validLocations)
+        # create one gem placed at that location
+        return Gem(r, c)

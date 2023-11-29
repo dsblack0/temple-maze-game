@@ -2,6 +2,7 @@ from cmu_graphics import *
 import images, guides
 
 class Powerup:
+    spinTimer = 0
     def __init__(self):
         self.activated = False
 
@@ -61,10 +62,15 @@ def drawSpinner(app):
             60, 60, fill='tan')
     app.spinSpinner.draw()
 
-def spinSpinner(app, n):
-    if n == 25:
-        return
-    else:
-        lastSection = app.spinner.pop()
-        app.spinner = [lastSection] + app.spinner
-        spinSpinner(app, n+1)
+def spinSpinner(app):
+    lastSection = app.spinner.pop()
+    app.spinner = [lastSection] + app.spinner
+
+def addPowerup(app):
+    powerup = app.spinner[1]
+    if powerup == 'WallWalk':
+        app.powerups.append(WallWalk())
+    elif powerup == 'Invis':
+        app.powerups.append(Invis())
+    elif powerup == 'Gem':
+        app.heldGems += 1

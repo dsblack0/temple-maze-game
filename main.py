@@ -16,11 +16,10 @@ def onAppStart(app):
     app.paused = True
     app.showInstructions = False
     buttons.initializeButtons(app)
-    app.powerups = [powerups.WallWalk(), powerups.Invis(), powerups.WallWalk()]
+    app.heldGems = 0
+    app.powerups = []
 
 def restartGame(app):
-    print('restart')
-    app.grid = None
     app.stepsPerSecond = 5
     app.timer = 0
     app.gameOver = False
@@ -35,6 +34,7 @@ def restartGame(app):
     app.monsters = characters.generateMonsters(2)
     app.placedArtifacts = characters.generateArtifacts(3)
     app.heldArtifacts = []
+    app.gem = characters.generateGem()
 
     app.score = 0
     app.droppedWeight = 0
@@ -56,10 +56,13 @@ def onStep(app):
         checkForCapture(app)
         if len(app.placedArtifacts) < 2:
             characters.generateArtifacts(2)
+    elif app.gameStarted and not app.gameOver:
         if app.spinning:
-            powerups.spinSpinner(app, 0)
-    if app.gameStarted and app.timer > 50 and not app.grid:
-        restartGame(app)
+            powerups.spinSpinner(app)
+            powerups.Powerup.spinTimer += 1
+            if powerups.Powerup.spinTimer > 25:
+                app.spinning = False
+                powerups.addPowerup(app)
 
 def onKeyPress(app, key):
     if not app.gameOver and not app.paused and not app.showInstructions:
@@ -67,7 +70,6 @@ def onKeyPress(app, key):
 
 def onMousePress(app, mx, my):
     if not app.gameStarted:
-        print('click')
         if app.instructions.pressButton(mx, my):
             app.showInstructions = not app.showInstructions
         elif app.startGame.pressButton(mx, my):
@@ -81,16 +83,18 @@ def onMousePress(app, mx, my):
             random.shuffle(app.spinner)
             app.showSpinner = True
             app.paused = True
+        elif app.restartInGame.pressButton(mx, my):
+            app.gameStarted = False
         elif app.showSpinner == True:
             if app.closeSpinner.pressButton(mx, my):
                 app.showSpinner = False
                 app.paused = False
-            elif app.spinSpinner.pressButton(mx, my):
+            elif app.spinSpinner.pressButton(mx, my) and app.heldGems > 0:
+                app.heldGems -= 1
+                powerups.Powerup.spinTimer = 0
                 app.spinning = True
         elif app.pause.pressButton(mx, my):
             app.paused = not app.paused
-        elif app.restartInGame.pressButton(mx, my):
-            app.gameStarted = False
     else:
         if app.restartEndGame.pressButton(mx, my):
             restartGame(app)
@@ -108,7 +112,7 @@ def redrawAll(app):
     elif app.gameOver:
         guides.drawGameOver(app)
     else:
-        guides.drawInGame(app)
+        guides.drawBackground(app, 1)
         if app.showInstructions:
             guides.drawInstructions(app)
         elif app.showSpinner:
@@ -124,6 +128,9 @@ def redrawAll(app):
                 artifact.draw()
             for artifact in app.heldArtifacts:
                 artifact.draw()
+            if app.gem:
+                app.gem.draw()
+        guides.drawInGame(app)
 
 def main():
     runApp()

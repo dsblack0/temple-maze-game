@@ -1,5 +1,5 @@
 from cmu_graphics import *
-import random
+import random, multiprocessing
 import images
 
 class Grid:
@@ -11,7 +11,25 @@ class Grid:
         self.height = app.height - self.top - self.margin
         self.rows = 15
         self.cols = 15
-        self.maze = self.generateMaze()
+        self.pathsCount = 150
+        self.maze = Grid.timeLimit(self.generateMaze)
+        '''WORK IN PROGRESS SECTION'''
+        while not self.maze:
+            self.pathsCount -= 10
+            self.maze = self.generateMaze()
+
+    # CITATION: Code for timings out function call from https://stackoverflow.com/questions/492519/timeout-on-a-function-call
+    @staticmethod
+    def timeLimit(mazeFunction):
+        p = multiprocessing.Process(target=mazeFunction)
+        p.start()
+        # Wait for 10 seconds or until process finishes
+        p.join(5)
+        # If thread is still active
+        if p.is_alive():
+            # Terminate - may not work if process is stuck for good
+            p.terminate()
+            p.join()
 
     def generateMaze(self):
         maze = [[False]*self.cols for _ in range(self.rows)]
@@ -20,14 +38,14 @@ class Grid:
 
     # CITATION: Used code in Ruby as reference point from https://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
     def createMazePattern(self, maze, n, currRow, currCol):
-        if n == 150:
+        if n == self.pathsCount:
             return maze
         else:
             directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
             random.shuffle(directions)
             for drow, dcol in directions:
                 nextRow, nextCol = currRow+drow, currCol+dcol
-                print('Generating Maze...')
+                print('Generating Maze...', self.pathsCount)
                 if ((0<=nextRow<self.rows) and (0<=nextCol<self.cols) and
                     (maze[nextRow][nextCol] == False)):
                         maze[currRow][currCol] = True
