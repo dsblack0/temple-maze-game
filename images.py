@@ -21,6 +21,14 @@ invis = CMUImage(invis)
 spin = Image.open('images/spin.png')
 spin = CMUImage(spin)
 
+# CITATION: https://templerun.fandom.com/wiki/Gems
+gem = Image.open('images/gem.png')
+gem = CMUImage(gem)
+
+# CITATION: https://www.dictionary.com/e/emoji/crying-face-emoji/
+sadFace = Image.open('images/sadFace.png')
+sadFace = CMUImage(sadFace)
+
 # CITATION: https://www.models-resource.com/resources/big_icons/21/20777.png?updated=1501277066
 mainChar = Image.open('images/mainChar.png')
 mainChar = CMUImage(mainChar)

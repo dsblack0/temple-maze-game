@@ -22,11 +22,13 @@ def drawPowerupBox(app):
     app.invisPowerup.draw()
     drawLabel(f'{powerups.Invis.name} x{powerups.Invis.count}',
               app.width/3+42, 50, size=12, fill='saddleBrown', align='left')
-    drawImage(images.invis, app.width/3+25, 50, width=10, height=10, align='center')
+    drawImage(powerups.Invis.image, app.width/3+25, 50, 
+              width=10, height=10, align='center')
     app.wallPowerup.draw()
     drawLabel(f'{powerups.WallWalk.name} x{powerups.WallWalk.count}',
               app.width/3+42, 90, size=12, fill='saddleBrown', align='left')
-    drawImage(images.walls, app.width/3+25, 90, width=10, height=10, align='center')
+    drawImage(powerups.WallWalk.image, app.width/3+25, 90, 
+              width=10, height=10, align='center')
     app.openSpinner.draw()
     drawLabel('Get Powerups!',
               app.width/3+42, 130, size=12, fill='saddleBrown', align='left')

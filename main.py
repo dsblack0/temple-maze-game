@@ -1,4 +1,5 @@
 from cmu_graphics import *
+import random
 import maze, characters, guides, buttons, powerups
 
 
@@ -6,8 +7,10 @@ def onAppStart(app):
     app.width = 800
     app.height = 800
     app.setMaxShapeCount(100000)
+    app.spinner = ['WallWalk', 'Invis', None, 
+                   'Invis', 'WallWalk', 'Gem']
+    
     app.highScore = 0
-
     app.gameStarted = False
     app.gameOver = False
     app.paused = True
@@ -16,18 +19,22 @@ def onAppStart(app):
     app.powerups = [powerups.WallWalk(), powerups.Invis(), powerups.WallWalk()]
 
 def restartGame(app):
+    print('restart')
+    app.grid = None
+    app.stepsPerSecond = 5
+    app.timer = 0
+    app.gameOver = False
+    app.paused = False
+    app.showInstructions = False
+    app.showSpinner = False
+    app.spinning = False
+
     app.gameStarted = True
     app.grid = maze.Grid()
     app.mainChar = characters.MainChar(0, 0)
     app.monsters = characters.generateMonsters(2)
     app.placedArtifacts = characters.generateArtifacts(3)
     app.heldArtifacts = []
-
-    app.stepsPerSecond = 5
-    app.timer = 0
-    app.gameOver = False
-    app.paused = False
-    app.showInstructions = False
 
     app.score = 0
     app.droppedWeight = 0
@@ -42,13 +49,17 @@ def checkForCapture(app):
                 app.highScore = app.score
 
 def onStep(app):
-    if not app.gameOver and not app.paused and not app.showInstructions:
+    if app.gameStarted and not app.gameOver and not app.paused:
         app.timer += 1
         for monster in app.monsters:
             monster.moveOnStep(['left', 'right', 'up', 'down'])
         checkForCapture(app)
         if len(app.placedArtifacts) < 2:
             characters.generateArtifacts(2)
+        if app.spinning:
+            powerups.spinSpinner(app, 0)
+    if app.gameStarted and app.timer > 50 and not app.grid:
+        restartGame(app)
 
 def onKeyPress(app, key):
     if not app.gameOver and not app.paused and not app.showInstructions:
@@ -56,21 +67,34 @@ def onKeyPress(app, key):
 
 def onMousePress(app, mx, my):
     if not app.gameStarted:
+        print('click')
         if app.instructions.pressButton(mx, my):
             app.showInstructions = not app.showInstructions
         elif app.startGame.pressButton(mx, my):
+            app.gameStarted = True
             restartGame(app)
-    if not app.gameOver and not app.paused:
+    elif not app.gameOver:
         if app.instructions.pressButton(mx, my):
             app.showInstructions = not app.showInstructions
-    if not app.gameOver:
-        if app.pause.pressButton(mx, my):
             app.paused = not app.paused
-        if app.restartInGame.pressButton(mx, my):
+        elif app.openSpinner.pressButton(mx, my):
+            random.shuffle(app.spinner)
+            app.showSpinner = True
+            app.paused = True
+        elif app.showSpinner == True:
+            if app.closeSpinner.pressButton(mx, my):
+                app.showSpinner = False
+                app.paused = False
+            elif app.spinSpinner.pressButton(mx, my):
+                app.spinning = True
+        elif app.pause.pressButton(mx, my):
+            app.paused = not app.paused
+        elif app.restartInGame.pressButton(mx, my):
             app.gameStarted = False
     else:
         if app.restartEndGame.pressButton(mx, my):
             restartGame(app)
+            app.gameStarted = False
 
 def onKeyHold(app, keys):
     if not app.gameOver and not app.paused:
@@ -85,10 +109,12 @@ def redrawAll(app):
         guides.drawGameOver(app)
     else:
         guides.drawInGame(app)
-        if app.paused:
-            guides.drawPauseScreen(app)
         if app.showInstructions:
             guides.drawInstructions(app)
+        elif app.showSpinner:
+            powerups.drawSpinner(app)
+        elif app.paused:
+            guides.drawPauseScreen(app)
         else:
             maze.drawGrid(app)
             app.mainChar.draw()
