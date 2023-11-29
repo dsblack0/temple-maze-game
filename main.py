@@ -56,6 +56,15 @@ def onStep(app):
         checkForCapture(app)
         if len(app.placedArtifacts) < 2:
             characters.generateArtifacts(2)
+        for powerup in app.powerups:
+            if isinstance(powerup, powerups.WallWalk) and powerup.activated:
+                powerups.Powerup.powerupTimer += 1
+                if powerups.Powerup.powerupTimer > 25:
+                    pass
+            elif isinstance(powerup, powerups.Invis) and powerup.activated:
+                powerups.Powerup.powerupTimer += 1
+                if powerups.Powerup.powerupTimer > 25:
+                    pass
     elif app.gameStarted and not app.gameOver:
         if app.spinning:
             powerups.spinSpinner(app)
@@ -93,6 +102,17 @@ def onMousePress(app, mx, my):
                 app.heldGems -= 1
                 powerups.Powerup.spinTimer = 0
                 app.spinning = True
+        if not app.paused:
+            if app.wallPowerup.pressButton(mx, my) and powerups.WallWalk.count > 0:
+                powerups.WallWalk.count -= 1
+                indx = app.powerups.index(powerups.WallWalk())
+                app.powerups[indx].engagePowerup()
+                powerups.Powerup.powerupTimer = 0
+            if app.invisPowerup.pressButton(mx, my) and powerups.Invis.count > 0:
+                powerups.Invis.count -= 1
+                indx = app.powerups.index(powerups.Invis())
+                app.powerups[indx].engagePowerup()
+                powerups.Powerup.powerupTimer = 0
         elif app.pause.pressButton(mx, my):
             app.paused = not app.paused
     else:

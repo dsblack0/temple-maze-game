@@ -3,6 +3,7 @@ import images, guides
 
 class Powerup:
     spinTimer = 0
+    powerupTimer = 0
     def __init__(self):
         self.activated = False
 
