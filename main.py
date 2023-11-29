@@ -56,6 +56,11 @@ def onStep(app):
         checkForCapture(app)
         if len(app.placedArtifacts) < 2:
             characters.generateArtifacts(2)
+        if app.mainChar.isMoving:
+            app.mainChar.moveByStep()
+        for monster in app.monsters:
+            if monster.isMoving:
+                monster.moveByStep()
         for powerup in app.powerups:
             if isinstance(powerup, powerups.WallWalk) and powerup.activated:
                 powerups.Powerup.powerupTimer += 1

@@ -7,6 +7,7 @@ class Character:
         self.row = r
         self.col = c
         self.updatePosition()
+        self.isMoving = None
         self.width, self.height = maze.getCellSize(app)
     
     @staticmethod
@@ -23,17 +24,44 @@ class Character:
     def updatePosition(self):
         self.posX, self.posY = maze.getCellLeftTop(app, self.row, self.col)
 
-    def move(self, direction, speed):
+    def move(self, direction):
+        ogLocation = self.row, self.col
         # move col & row based on direction
         if direction == 'left':
-            self.col -= 1*speed
+            self.col -= 1
         elif direction == 'right':
-            self.col += 1*speed
+            self.col += 1
         elif direction == 'up':
-            self.row -= 1*speed
+            self.row -= 1
         elif direction == 'down':
-            self.row += 1*speed
-        self.updatePosition()
+            self.row += 1
+        # undo move if not valid location
+        if (self.row, self.col) not in self.validLocations():
+            self.row, self.col = ogLocation
+        self.isMoving = direction
+
+    def moveByStep(self):
+        finalX, finalY = maze.getCellLeftTop(app, self.row, self.col)
+        if self.isMoving == 'left':
+            self.posX -= 10
+            if self.posX <= finalX:
+                self.isMoving = None
+                self.posX = finalX
+        elif self.isMoving == 'right':
+            self.posX += 10
+            if self.posX >= finalX:
+                self.isMoving = None
+                self.posX = finalX
+        elif self.isMoving == 'up':
+            self.posY -= 10
+            if self.posY <= finalY:
+                self.isMoving = None
+                self.posY = finalY
+        elif self.isMoving == 'down':
+            self.posY += 10
+            if self.posY >= finalY:
+                self.isMoving = None
+                self.posY = finalY
     
     def draw(self):
         drawImage(self.image, self.posX, self.posY, align='top-left',
@@ -56,7 +84,6 @@ class MainChar(Character):
         return validLocations
 
     def onKeyPress(self, key):
-        ogLocation = self.row, self.col
         # pick up artifact when press 'space'
         if key == 'space':
             # if at cart, drop of one held artifact
@@ -85,15 +112,9 @@ class MainChar(Character):
                             app.heldWeight += artifactWeight
                             
         # move mainChar & held artifacts with direction keys            
-        self.move(key, 1)
+        self.move(key)
         for artifact in app.heldArtifacts:
             artifact.row, artifact.col = self.row, self.col
-        # undo move if not valid location
-        if (self.row, self.col) not in MainChar.validLocations():
-            self.row, self.col = ogLocation
-            self.updatePosition()
-            for artifact in app.heldArtifacts:
-                artifact.row, artifact.col = ogLocation
 
     def onKeyHold(self, keys):
         ogLocation = self.row, self.col
@@ -108,14 +129,9 @@ class MainChar(Character):
             key = 'down'
         # move character & held artifacts if direction key held
         if key:
-            self.move(key, 1)
+            self.move(key)
             for artifact in app.heldArtifacts:
                 artifact.row, artifact.col = self.row, self.col
-        # undo move if not valid
-        if (self.row, self.col) not in MainChar.validLocations():
-            self.row, self.col = ogLocation
-            for artifact in app.heldArtifacts:
-                artifact.row, artifact.col = ogLocation
 
 class Monster(Character):
     speed = 1
@@ -127,7 +143,7 @@ class Monster(Character):
         if app.timer % (app.stepsPerSecond/Monster.speed) == 0.0:
             direction = random.choice(directions)
             ogLocation = self.row, self.col
-            self.move(direction, 1)
+            self.move(direction)
             if (self.row, self.col) not in Monster.validLocations():
                 # revert move if not valid
                 self.row, self.col = ogLocation
@@ -141,7 +157,6 @@ def generateMonsters(count, monsters = []):
         return monsters
     else:
         validLocations = Monster.validLocations()
-        print(validLocations)
         # randomly choose a valid location
         r, c = random.choice(validLocations)
         # create new monster placed at that location
