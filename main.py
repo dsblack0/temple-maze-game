@@ -47,6 +47,11 @@ def checkForCapture(app):
             app.gameOver = True
             if app.score > app.highScore:
                 app.highScore = app.score
+        if ((monster.posX == app.mainChar.posX) and
+             (monster.posY == app.mainChar.posY)):
+            app.gameOver = True
+            if app.score > app.highScore:
+                app.highScore = app.score
 
 def onStep(app):
     if app.gameStarted and not app.gameOver and not app.paused:
@@ -61,6 +66,8 @@ def onStep(app):
         for monster in app.monsters:
             if monster.isMoving:
                 monster.moveByStep()
+        for artifact in app.heldArtifacts:
+            artifact.posX, artifact.posY = app.mainChar.posX, app.mainChar.posY
         for powerup in app.powerups:
             if isinstance(powerup, powerups.WallWalk) and powerup.activated:
                 powerups.Powerup.powerupTimer += 1

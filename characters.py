@@ -113,8 +113,8 @@ class MainChar(Character):
                             
         # move mainChar & held artifacts with direction keys            
         self.move(key)
-        for artifact in app.heldArtifacts:
-            artifact.row, artifact.col = self.row, self.col
+        # for artifact in app.heldArtifacts:
+        #     artifact.row, artifact.col = self.row, self.col
 
     def onKeyHold(self, keys):
         ogLocation = self.row, self.col
