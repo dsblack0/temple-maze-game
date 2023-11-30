@@ -30,6 +30,12 @@ class Invis(Powerup):
         super().__init__()
         Invis.count += 1
 
+def findPowerup(powerup):
+    for i in range(len(app.powerups)):
+        if isinstance(app.powerups[i], powerup):
+            return i
+    return -1
+
 def labelLocation(i):
     if i == 0:
         return app.width/2+110, app.height/2-75

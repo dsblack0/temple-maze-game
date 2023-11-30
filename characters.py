@@ -1,6 +1,6 @@
 from cmu_graphics import *
 import random
-import images, maze
+import images, maze, powerups
 
 class Character:
     def __init__(self, r, c):
@@ -36,8 +36,11 @@ class Character:
         elif direction == 'down':
             self.row += 1
         # undo move if not valid location
-        if (self.row, self.col) not in self.validLocations():
-            self.row, self.col = ogLocation
+        indx = powerups.findPowerup(powerups.WallWalk)
+        if ((indx == -1) or (not app.powerups[indx].activated) or
+            (not isinstance(self, MainChar))):
+            if (self.row, self.col) not in self.validLocations():
+                self.row, self.col = ogLocation
         self.isMoving = direction
 
     def moveByStep(self):

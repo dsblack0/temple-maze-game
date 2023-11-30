@@ -38,6 +38,11 @@ def drawPowerupBox(app):
               width=15, height=15, align='center')
     drawLabel(f'x{app.heldGems}', 
               app.width/3+92, 50, size=15, fill='saddleBrown', align='left')
+    for powerup in app.powerups:
+        if powerup.activated:
+            timer = (50-powerups.Powerup.powerupTimer) // 10 + 1
+            drawLabel(f'Powerup: {timer}s',
+                      app.width/3+80, 130, size=15, fill='saddleBrown', align='left')
 
 def drawGameStart(app):
     drawBackground(app, 2)

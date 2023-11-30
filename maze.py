@@ -56,7 +56,7 @@ class Grid:
                         maze[nextRow][nextCol] = False
             return None
 
-# CITATION: general structure for drawing grid from: CS Academy 5.3.2 Drawing a 2d Board
+# CITATION: general structure for drawing grid from CS Academy 5.3.2 Drawing a 2d Board
 def getCellSize(app):
     cellW = app.grid.width / app.grid.cols
     cellH = app.grid.height / app.grid.rows
