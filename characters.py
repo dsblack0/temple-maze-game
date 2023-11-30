@@ -160,6 +160,7 @@ class Monster(Character):
 
 def generateMonsters(count, monsters = []):
     # create monsters until reach desired count
+    print(app.grid.maze)
     if len(monsters) == count:
         return monsters
     else:

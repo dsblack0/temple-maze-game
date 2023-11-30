@@ -56,6 +56,10 @@ class Grid:
                         maze[nextRow][nextCol] = False
             return None
 
+def doOverlap(app, x0, y0, x1, y1):
+    cellW, cellH = getCellSize(app)
+    return (abs(x0-x1)<cellW) and (abs(y0-y1)<cellH)
+
 # CITATION: general structure for drawing grid from CS Academy 5.3.2 Drawing a 2d Board
 def getCellSize(app):
     cellW = app.grid.width / app.grid.cols
@@ -79,7 +83,7 @@ def drawCell(app, r, c):
                   width=cellW, height=cellH, align='top-left')
     else:
         drawRect(cellX0, cellY0, cellW, cellH, 
-                fill=None, border='saddleBrown')
+                fill=None, border=None)
 
 def drawGridBorder(app):
     drawRect(app.grid.left, app.grid.top, app.grid.width, app.grid.height,

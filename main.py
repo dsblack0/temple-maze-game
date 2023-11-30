@@ -42,8 +42,8 @@ def restartGame(app):
 
 def checkForCapture(app):
     for monster in app.monsters:
-        if ((monster.posX == app.mainChar.posX) and
-             (monster.posY == app.mainChar.posY)):
+        if maze.doOverlap(app, monster.posX, monster.posY,
+                           app.mainChar.posX, app.mainChar.posY):
             app.gameOver = True
             if app.score > app.highScore:
                 app.highScore = app.score
