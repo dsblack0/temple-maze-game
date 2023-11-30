@@ -39,7 +39,11 @@ class Character:
         indx = powerups.findPowerup(powerups.WallWalk)
         if ((indx == -1) or (not app.powerups[indx].activated) or
             (not isinstance(self, MainChar))):
-            if (self.row, self.col) not in self.validLocations():
+            if ((self.row, self.col) not in self.validLocations()):
+                self.row, self.col = ogLocation
+        else:
+            if not (0<=self.row<app.grid.rows and 
+                0<=self.col<app.grid.cols):
                 self.row, self.col = ogLocation
         self.isMoving = direction
 

@@ -30,6 +30,7 @@ class Invis(Powerup):
         super().__init__()
         Invis.count += 1
 
+# CITATION: based on code from CS Academy 4.2.8 List Methods
 def findPowerup(powerup):
     for i in range(len(app.powerups)):
         if isinstance(app.powerups[i], powerup):

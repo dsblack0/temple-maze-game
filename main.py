@@ -17,10 +17,10 @@ def onAppStart(app):
     app.showInstructions = False
     buttons.initializeButtons(app)
     app.heldGems = 0
-    app.powerups = [powerups.WallWalk()]
+    app.powerups = [powerups.WallWalk(), powerups.Invis()]
 
 def restartGame(app):
-    app.stepsPerSecond = 10
+    app.stepsPerSecond = 20
     app.timer = 0
     app.gameOver = False
     app.paused = False
@@ -68,7 +68,7 @@ def onStep(app):
         for powerup in app.powerups:
             if isinstance(powerup, powerups.WallWalk) and powerup.activated:
                 powerups.Powerup.powerupTimer += 1
-                if powerups.Powerup.powerupTimer > 50:
+                if powerups.Powerup.powerupTimer > 100:
                     app.powerups.remove(powerup)
                     powerup.activated = False
                     validLocations = characters.MainChar.validLocations()
@@ -80,7 +80,7 @@ def onStep(app):
                     app.mainChar.updatePosition()
             elif isinstance(powerup, powerups.Invis) and powerup.activated:
                 powerups.Powerup.powerupTimer += 1
-                if powerups.Powerup.powerupTimer > 50:
+                if powerups.Powerup.powerupTimer > 100:
                     app.powerups.remove(powerup)
                     powerup.activated = False
 
@@ -88,7 +88,7 @@ def onStep(app):
         if app.spinning:
             powerups.spinSpinner(app)
             powerups.Powerup.spinTimer += 1
-            if powerups.Powerup.spinTimer > 50:
+            if powerups.Powerup.spinTimer > 100:
                 app.spinning = False
                 powerups.addPowerup(app)
 
@@ -132,7 +132,7 @@ def onMousePress(app, mx, my):
                 indx = powerups.findPowerup(powerups.Invis)
                 app.powerups[indx].engagePowerup()
                 powerups.Powerup.powerupTimer = 0
-        elif app.pause.pressButton(mx, my):
+        if app.pause.pressButton(mx, my):
             app.paused = not app.paused
     else:
         if app.restartEndGame.pressButton(mx, my):
