@@ -47,21 +47,23 @@ class Character:
         indx = powerups.findPowerup(powerups.WallWalk)
         if (isinstance(self, MainChar) and
             (indx != -1) and (app.powerups[indx].activated)):
+                # if WallWalk powerup active, MainChar can move anywhere on grid
                 if ((not (0<=self.row<app.grid.rows) and (0<=self.col<app.grid.cols) or
                       (self.posX>app.grid.width) or (self.posY>app.grid.height))):
                     self.posX, self.posY = ogLocation
         else:
+            # check if char position doesn't overlap any walls
             for (r, c) in maze.wallLocations():
                 wallX, wallY = maze.getCellLeftTop(app, r, c)
                 if maze.doOverlap(app, self.posX, self.posY, wallX, wallY):
                     self.posX, self.posY = ogLocation
                     break   
         self.updateRowCol()
+        # check if new row & col are validLocation for character type
         if (((self.row, self.col) not in self.validLocations()) or
             (self.posX>app.grid.width) or (self.posY>app.grid.height)):
             self.posX, self.posY = ogLocation
             self.updateRowCol()
-        if isinstance(self, MainChar): print(self.row, self.col)
     
     def draw(self):
         drawImage(self.image, self.posX, self.posY, align='top-left',
@@ -150,7 +152,6 @@ class Monster(Character):
 
 def generateMonsters(count, monsters = []):
     # create monsters until reach desired count
-    #print(app.grid.maze)
     if len(monsters) == count:
         return monsters
     else:

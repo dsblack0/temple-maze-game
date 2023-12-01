@@ -10,14 +10,15 @@ def onAppStart(app):
     app.spinner = ['WallWalk', 'Invis', None, 
                    'Invis', 'WallWalk', 'Gem']
     
+    # initialze score, gems & powerups to last whole game
     app.highScore = 0
+    app.heldGems = 0
+    app.powerups = [powerups.WallWalk(), powerups.Invis()]
     app.gameStarted = False
     app.gameOver = False
     app.paused = True
     app.showInstructions = False
     buttons.initializeButtons(app)
-    app.heldGems = 0
-    app.powerups = [powerups.WallWalk(), powerups.Invis()]
 
 def restartGame(app):
     app.stepsPerSecond = 20
@@ -42,6 +43,7 @@ def restartGame(app):
 
 def checkForCapture(app):
     for monster in app.monsters:
+        # game over if char overlaps any monster
         if maze.doOverlap(app, monster.posX, monster.posY,
                            app.mainChar.posX, app.mainChar.posY):
             app.gameOver = True
@@ -49,29 +51,31 @@ def checkForCapture(app):
                 app.highScore = app.score
 
 def onStep(app):
+    # when playing game
     if app.gameStarted and not app.gameOver and not app.paused:
-        app.timer += 1
+        # move monsters
         for monster in app.monsters:
             monster.moveOnStep(['left', 'right', 'up', 'down'])
+        # Unless invisibility powerup active, check for capture
         indx = powerups.findPowerup(powerups.Invis)
         if indx == -1 or not app.powerups[indx].activated:
             checkForCapture(app)
+        # generate new artifacts each time pick up one
         if len(app.placedArtifacts) < 2:
             characters.generateArtifacts(2)
-
-        for monster in app.monsters:
-            if monster.isMoving:
-                monster.moveByStep()
+        # move held artifacts with main char
         for artifact in app.heldArtifacts:
             artifact.posX, artifact.posY = app.mainChar.posX, app.mainChar.posY
         for powerup in app.powerups:
             if isinstance(powerup, powerups.WallWalk) and powerup.activated:
                 powerups.Powerup.powerupTimer += 1
+                # disable powerup after 10 seconds
                 if powerups.Powerup.powerupTimer > 100:
                     app.powerups.remove(powerup)
                     powerup.activated = False
                     validLocations = characters.MainChar.validLocations()
                     iterations = 0
+                    # if char in middle of wall, move to closest path above or below
                     while (app.mainChar.row, app.mainChar.col) not in validLocations:
                         iterations += 1
                         if iterations > 10: app.mainChar.row += 1
@@ -79,12 +83,14 @@ def onStep(app):
                     app.mainChar.updatePosition()
             elif isinstance(powerup, powerups.Invis) and powerup.activated:
                 powerups.Powerup.powerupTimer += 1
+                # disable powerup after 10 seconds
                 if powerups.Powerup.powerupTimer > 100:
                     app.powerups.remove(powerup)
                     powerup.activated = False
-
+    # when game started but paused
     elif app.gameStarted and not app.gameOver:
         if app.spinning:
+            # run spinner for 10 sec.
             powerups.spinSpinner(app)
             powerups.Powerup.spinTimer += 1
             if powerups.Powerup.spinTimer > 100:
@@ -92,16 +98,19 @@ def onStep(app):
                 powerups.addPowerup(app)
 
 def onKeyPress(app, key):
+    # call onKeyPress of MainChar class
     if not app.gameOver and not app.paused and not app.showInstructions:
         app.mainChar.onKeyPress(key)
 
 def onMousePress(app, mx, my):
+    # when game not yet started
     if not app.gameStarted:
         if app.instructions.pressButton(mx, my):
             app.showInstructions = not app.showInstructions
         elif app.startGame.pressButton(mx, my):
             app.gameStarted = True
             restartGame(app)
+    # when game started
     elif not app.gameOver:
         if app.instructions.pressButton(mx, my):
             app.showInstructions = not app.showInstructions
@@ -120,6 +129,7 @@ def onMousePress(app, mx, my):
                 app.heldGems -= 1
                 powerups.Powerup.spinTimer = 0
                 app.spinning = True
+        # only when playing game & not paused
         if not app.paused:
             if app.wallPowerup.pressButton(mx, my) and powerups.WallWalk.count > 0:
                 powerups.WallWalk.count -= 1
@@ -133,12 +143,14 @@ def onMousePress(app, mx, my):
                 powerups.Powerup.powerupTimer = 0
         if app.pause.pressButton(mx, my):
             app.paused = not app.paused
+    # when game over
     else:
         if app.restartEndGame.pressButton(mx, my):
             restartGame(app)
             app.gameStarted = False
 
 def onKeyHold(app, keys):
+    # call onKeyHold from MainChar class
     if not app.gameOver and not app.paused:
         app.mainChar.onKeyHold(keys)
 
