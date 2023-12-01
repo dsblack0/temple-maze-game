@@ -27,28 +27,28 @@ class Character:
     def updateRowCol(self):
         cellW, cellH = maze.getCellSize(app)
 
-        c = (self.posX - app.grid.left) // cellW
-        r = (self.posY - app.grid.top) //cellH
+        self.col = (self.posX - app.grid.left) // cellW
+        self.row = (self.posY - app.grid.top) //cellH
 
-    def move(self, direction):
+    def move(self, direction, speed):
         ogLocation = self.posX, self.posY
         cellW, cellH = maze.getCellSize(app)
         # move col & row based on direction
         if direction == 'left':
-            self.posX -= 10
+            self.posX -= 10*speed
         elif direction == 'right':
-            self.posX += 10
+            self.posX += 10*speed
         elif direction == 'up':
-            self.posY -= 10
+            self.posY -= 10*speed
         elif direction == 'down':
-            self.posY += 10
+            self.posY += 10*speed
         self.updateRowCol() 
         # undo move if not valid location
         indx = powerups.findPowerup(powerups.WallWalk)
         if (isinstance(self, MainChar) and
             (indx != -1) and (app.powerups[indx].activated)):
-                if not ((app.grid.left<=self.posX<app.grid.width-cellW) and 
-                        (app.grid.top<=self.col<app.grid.height-cellH)):
+                if ((not (0<=self.row<app.grid.rows) and (0<=self.col<app.grid.cols) or
+                      (self.posX>app.grid.width) or (self.posY>app.grid.height))):
                     self.posX, self.posY = ogLocation
         else:
             for (r, c) in maze.wallLocations():
@@ -56,10 +56,12 @@ class Character:
                 if maze.doOverlap(app, self.posX, self.posY, wallX, wallY):
                     self.posX, self.posY = ogLocation
                     break   
-        self.updateRowCol() 
-        if ((self.row, self.col) not in self.validLocations()):
-            self.row, self.col = ogLocation
-            self.updatePosition()
+        self.updateRowCol()
+        if (((self.row, self.col) not in self.validLocations()) or
+            (self.posX>app.grid.width) or (self.posY>app.grid.height)):
+            self.posX, self.posY = ogLocation
+            self.updateRowCol()
+        if isinstance(self, MainChar): print(self.row, self.col)
     
     def draw(self):
         drawImage(self.image, self.posX, self.posY, align='top-left',
@@ -95,22 +97,23 @@ class MainChar(Character):
                 if app.droppedWeight >= 10:
                     app.droppedWeight -= 10
                     app.score += 1
-            elif ((self.row == app.gem.row) and 
-                  (self.col == app.gem.col)):
+            elif (app.gem and maze.doOverlap(app, self.posX, self.posY, 
+                                             app.gem.posX, app.gem.posY)):
                     app.heldGems += 1
                     app.gem = None
             else:
                 for artifact in app.placedArtifacts:
                     artifactWeight = Artifact.weights[artifact.image]
                     # if at artifact location, pick up if total weight not over 10
-                    if ((self.row == artifact.row) and (self.col == artifact.col) and
+                    if (maze.doOverlap(app, self.posX, self.posY, artifact.posX, 
+                                        artifact.posY) and
                         (app.heldWeight + artifactWeight <= 10)):
                             app.heldArtifacts.append(artifact)
                             app.placedArtifacts.remove(artifact)
                             app.heldWeight += artifactWeight
                             
         # move mainChar & held artifacts with direction keys            
-        self.move(key)
+        self.move(key, 1)
 
     def onKeyHold(self, keys):
         key = None
@@ -124,7 +127,7 @@ class MainChar(Character):
             key = 'down'
         # move character & held artifacts if direction key held
         if key:
-            self.move(key)
+            self.move(key, 1)
             for artifact in app.heldArtifacts:
                 artifact.row, artifact.col = self.row, self.col
 
@@ -137,7 +140,7 @@ class Monster(Character):
     def moveOnStep(self, directions):
         direction = random.choice(directions)
         ogLocation = self.row, self.col
-        self.move(direction)
+        self.move(direction, 3)
         if (self.row, self.col) not in Monster.validLocations():
             # revert move if not valid
             self.row, self.col = ogLocation

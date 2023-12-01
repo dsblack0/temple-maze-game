@@ -94,7 +94,7 @@ def drawCell(app, r, c):
                   width=cellW, height=cellH, align='top-left')
     else:
         drawRect(cellX0, cellY0, cellW, cellH, 
-                fill=None, border='saddleBrown')
+                fill=None, border=None)
 
 def drawGridBorder(app):
     drawRect(app.grid.left, app.grid.top, app.grid.width, app.grid.height,

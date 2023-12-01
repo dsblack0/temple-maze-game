@@ -58,6 +58,7 @@ def onStep(app):
             checkForCapture(app)
         if len(app.placedArtifacts) < 2:
             characters.generateArtifacts(2)
+
         for monster in app.monsters:
             if monster.isMoving:
                 monster.moveByStep()
