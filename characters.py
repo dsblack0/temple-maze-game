@@ -24,51 +24,42 @@ class Character:
     def updatePosition(self):
         self.posX, self.posY = maze.getCellLeftTop(app, self.row, self.col)
 
+    def updateRowCol(self):
+        cellW, cellH = maze.getCellSize(app)
+
+        c = (self.posX - app.grid.left) // cellW
+        r = (self.posY - app.grid.top) //cellH
+
     def move(self, direction):
-        ogLocation = self.row, self.col
+        ogLocation = self.posX, self.posY
+        cellW, cellH = maze.getCellSize(app)
         # move col & row based on direction
         if direction == 'left':
-            self.col -= 1
+            self.posX -= 10
         elif direction == 'right':
-            self.col += 1
+            self.posX += 10
         elif direction == 'up':
-            self.row -= 1
+            self.posY -= 10
         elif direction == 'down':
-            self.row += 1
+            self.posY += 10
+        self.updateRowCol() 
         # undo move if not valid location
         indx = powerups.findPowerup(powerups.WallWalk)
-        if ((indx == -1) or (not app.powerups[indx].activated) or
-            (not isinstance(self, MainChar))):
-            if ((self.row, self.col) not in self.validLocations()):
-                self.row, self.col = ogLocation
+        if (isinstance(self, MainChar) and
+            (indx != -1) and (app.powerups[indx].activated)):
+                if not ((app.grid.left<=self.posX<app.grid.width-cellW) and 
+                        (app.grid.top<=self.col<app.grid.height-cellH)):
+                    self.posX, self.posY = ogLocation
         else:
-            if not (0<=self.row<app.grid.rows and 
-                0<=self.col<app.grid.cols):
-                self.row, self.col = ogLocation
-        self.isMoving = direction
-
-    def moveByStep(self):
-        finalX, finalY = maze.getCellLeftTop(app, self.row, self.col)
-        if self.isMoving == 'left':
-            self.posX -= 10
-            if self.posX <= finalX:
-                self.isMoving = None
-                self.posX = finalX
-        elif self.isMoving == 'right':
-            self.posX += 10
-            if self.posX >= finalX:
-                self.isMoving = None
-                self.posX = finalX
-        elif self.isMoving == 'up':
-            self.posY -= 10
-            if self.posY <= finalY:
-                self.isMoving = None
-                self.posY = finalY
-        elif self.isMoving == 'down':
-            self.posY += 10
-            if self.posY >= finalY:
-                self.isMoving = None
-                self.posY = finalY
+            for (r, c) in maze.wallLocations():
+                wallX, wallY = maze.getCellLeftTop(app, r, c)
+                if maze.doOverlap(app, self.posX, self.posY, wallX, wallY):
+                    self.posX, self.posY = ogLocation
+                    break   
+        self.updateRowCol() 
+        if ((self.row, self.col) not in self.validLocations()):
+            self.row, self.col = ogLocation
+            self.updatePosition()
     
     def draw(self):
         drawImage(self.image, self.posX, self.posY, align='top-left',
@@ -120,11 +111,8 @@ class MainChar(Character):
                             
         # move mainChar & held artifacts with direction keys            
         self.move(key)
-        # for artifact in app.heldArtifacts:
-        #     artifact.row, artifact.col = self.row, self.col
 
     def onKeyHold(self, keys):
-        ogLocation = self.row, self.col
         key = None
         if 'left' in keys:
             key = 'left'
@@ -147,20 +135,19 @@ class Monster(Character):
         self.image = images.monster
 
     def moveOnStep(self, directions):
-        if app.timer % (app.stepsPerSecond/Monster.speed) == 0.0:
-            direction = random.choice(directions)
-            ogLocation = self.row, self.col
-            self.move(direction)
-            if (self.row, self.col) not in Monster.validLocations():
-                # revert move if not valid
-                self.row, self.col = ogLocation
-                # try moving again in another direction
-                directions.remove(direction)
-                self.moveOnStep(directions)
+        direction = random.choice(directions)
+        ogLocation = self.row, self.col
+        self.move(direction)
+        if (self.row, self.col) not in Monster.validLocations():
+            # revert move if not valid
+            self.row, self.col = ogLocation
+            # try moving again in another direction
+            directions.remove(direction)
+            self.moveOnStep(directions)
 
 def generateMonsters(count, monsters = []):
     # create monsters until reach desired count
-    print(app.grid.maze)
+    #print(app.grid.maze)
     if len(monsters) == count:
         return monsters
     else:

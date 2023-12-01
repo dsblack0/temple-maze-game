@@ -11,12 +11,13 @@ class Grid:
         self.height = app.height - self.top - self.margin
         self.rows = 15
         self.cols = 15
-        self.pathsCount = 150
-        self.maze = Grid.timeLimit(self.generateMaze)
+        self.pathsCount = 140
+        self.maze = self.generateMaze()
         '''WORK IN PROGRESS SECTION'''
-        while not self.maze:
-            self.pathsCount -= 10
-            self.maze = self.generateMaze()
+        # if not self.maze:
+        #     print('switch')
+        #     self.pathsCount -= 10
+        #     self.maze = self.generateMaze()
 
     # CITATION: Code for timings out function call from https://stackoverflow.com/questions/492519/timeout-on-a-function-call
     @staticmethod
@@ -45,7 +46,7 @@ class Grid:
             random.shuffle(directions)
             for drow, dcol in directions:
                 nextRow, nextCol = currRow+drow, currCol+dcol
-                print('Generating Maze...', self.pathsCount)
+                #print('Generating Maze...', self.pathsCount)
                 if ((0<=nextRow<self.rows) and (0<=nextCol<self.cols) and
                     (maze[nextRow][nextCol] == False)):
                         maze[currRow][currCol] = True
@@ -58,7 +59,17 @@ class Grid:
 
 def doOverlap(app, x0, y0, x1, y1):
     cellW, cellH = getCellSize(app)
-    return (abs(x0-x1)<cellW) and (abs(y0-y1)<cellH)
+    return (abs(x0-x1)<cellW-5) and (abs(y0-y1)<cellH-5)
+
+def wallLocations():
+    wallLocations = []
+    # go through whole board
+    for row in range(app.grid.rows):
+            for col in range(app.grid.cols):
+                # create list of all wall's locations
+                if app.grid.maze[row][col] == False:
+                    wallLocations.append((row, col))
+    return wallLocations
 
 # CITATION: general structure for drawing grid from CS Academy 5.3.2 Drawing a 2d Board
 def getCellSize(app):
@@ -83,7 +94,7 @@ def drawCell(app, r, c):
                   width=cellW, height=cellH, align='top-left')
     else:
         drawRect(cellX0, cellY0, cellW, cellH, 
-                fill=None, border=None)
+                fill=None, border='saddleBrown')
 
 def drawGridBorder(app):
     drawRect(app.grid.left, app.grid.top, app.grid.width, app.grid.height,
