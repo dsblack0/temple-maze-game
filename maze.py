@@ -11,13 +11,13 @@ class Grid:
         self.height = app.height - self.top - self.margin
         self.rows = 15
         self.cols = 15
-        self.pathsCount = 140
-        self.maze = self.generateMaze()
-        '''WORK IN PROGRESS SECTION'''
-        # if not self.maze:
-        #     print('switch')
-        #     self.pathsCount -= 10
-        #     self.maze = self.generateMaze()
+        self.pathsCount = 150
+        self.maze = Grid.timeLimit(self.generateMaze)
+        '''WORK IN PROGRESS TO INCREASE MAZE GENERATION EFFICIENCY'''
+        if not self.maze:
+            print('switch')
+            self.pathsCount -= 10
+            self.maze = self.generateMaze()
 
     # CITATION: Code for timings out function call from https://stackoverflow.com/questions/492519/timeout-on-a-function-call
     @staticmethod
