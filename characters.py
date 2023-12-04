@@ -35,13 +35,13 @@ class Character:
         cellW, cellH = maze.getCellSize(app)
         # move col & row based on direction
         if direction == 'left':
-            self.posX -= 10*speed
+            self.posX -= 11.5*speed
         elif direction == 'right':
-            self.posX += 10*speed
+            self.posX += 11.5*speed
         elif direction == 'up':
-            self.posY -= 10*speed
+            self.posY -= 13*speed
         elif direction == 'down':
-            self.posY += 10*speed
+            self.posY += 13*speed
         self.updateRowCol() 
         # undo move if not valid location
         indx = powerups.findPowerup(powerups.WallWalk)
@@ -49,7 +49,8 @@ class Character:
             (indx != -1) and (app.powerups[indx].activated)):
                 # if WallWalk powerup active, MainChar can move anywhere on grid
                 if ((not (0<=self.row<app.grid.rows) and (0<=self.col<app.grid.cols) or
-                      (self.posX>app.grid.width) or (self.posY>app.grid.height))):
+                      (self.posX>app.grid.left + app.grid.width - cellW) 
+                      or (self.posY>app.grid.top + app.grid.height - cellH))):
                     self.posX, self.posY = ogLocation
         else:
             # check if char position doesn't overlap any walls
@@ -61,7 +62,8 @@ class Character:
         self.updateRowCol()
         # check if new row & col are validLocation for character type
         if (((self.row, self.col) not in self.validLocations()) or
-            (self.posX>app.grid.width) or (self.posY>app.grid.height)):
+            (self.posX>app.grid.left + app.grid.width - cellW) or 
+            (self.posY>app.grid.top + app.grid.height - cellH)):
             self.posX, self.posY = ogLocation
             self.updateRowCol()
     
@@ -72,7 +74,7 @@ class Character:
 class MainChar(Character):
     def __init__(self, r, c):
         super().__init__(r, c)
-        self.image = images.mainChar
+        self.image = images.karmaLee
 
     @staticmethod
     def validLocations():

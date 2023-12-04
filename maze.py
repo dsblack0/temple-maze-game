@@ -59,7 +59,7 @@ class Grid:
 
 def doOverlap(app, x0, y0, x1, y1):
     cellW, cellH = getCellSize(app)
-    return (abs(x0-x1)<cellW-5) and (abs(y0-y1)<cellH-5)
+    return (abs(x0-x1)<cellW-10) and (abs(y0-y1)<cellH-10)
 
 def wallLocations():
     wallLocations = []
@@ -73,8 +73,8 @@ def wallLocations():
 
 # CITATION: general structure for drawing grid from CS Academy 5.3.2 Drawing a 2d Board
 def getCellSize(app):
-    cellW = app.grid.width / app.grid.cols
-    cellH = app.grid.height / app.grid.rows
+    cellW = app.grid.width // app.grid.cols
+    cellH = app.grid.height // app.grid.rows
     return cellW, cellH
 
 def getCellLeftTop(app, r, c):

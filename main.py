@@ -1,6 +1,6 @@
 from cmu_graphics import *
 import random
-import maze, characters, guides, buttons, powerups
+import maze, characters, guides, buttons, powerups, music
 
 
 def onAppStart(app):
@@ -13,7 +13,7 @@ def onAppStart(app):
     # initialze score, gems & powerups to last whole game
     app.highScore = 0
     app.heldGems = 0
-    app.powerups = [powerups.WallWalk(), powerups.Invis()]
+    app.powerups = []
     app.gameStarted = False
     app.gameOver = False
     app.paused = True
@@ -47,6 +47,8 @@ def checkForCapture(app):
         if maze.doOverlap(app, monster.posX, monster.posY,
                            app.mainChar.posX, app.mainChar.posY):
             app.gameOver = True
+            music.skySummit.pause()
+            music.emeraldCity.play(loop = True)
             if app.score > app.highScore:
                 app.highScore = app.score
 
@@ -96,6 +98,8 @@ def onStep(app):
             if powerups.Powerup.spinTimer > 100:
                 app.spinning = False
                 powerups.addPowerup(app)
+    elif not app.gameStarted:
+        music.emeraldCity.play(loop = True)
 
 def onKeyPress(app, key):
     # call onKeyPress of MainChar class
@@ -110,6 +114,8 @@ def onMousePress(app, mx, my):
         elif app.startGame.pressButton(mx, my):
             app.gameStarted = True
             restartGame(app)
+            music.emeraldCity.pause()
+            music.skySummit.play(loop = True)
     # when game started
     elif not app.gameOver:
         if app.instructions.pressButton(mx, my):
@@ -121,6 +127,8 @@ def onMousePress(app, mx, my):
             app.paused = True
         elif app.restartInGame.pressButton(mx, my):
             app.gameStarted = False
+            music.skySummit.pause()
+            music.emeraldCity.play(loop = True)
         elif app.showSpinner == True:
             if app.closeSpinner.pressButton(mx, my):
                 app.showSpinner = False
@@ -147,6 +155,8 @@ def onMousePress(app, mx, my):
     else:
         if app.restartEndGame.pressButton(mx, my):
             restartGame(app)
+            music.emeraldCity.pause()
+            music.skySummit.play(loop = True)
             app.gameStarted = False
 
 def onKeyHold(app, keys):

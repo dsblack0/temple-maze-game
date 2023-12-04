@@ -61,9 +61,23 @@ def drawInGame(app):
 def drawInstructions(app):
     drawRect(0, app.height/5, app.width, app.height, fill='saddleBrown')
     drawLabel('Instructions', app.width/2, app.height/4, 
-              fill='tan', size=50)
+              fill='tan', size=50, bold=True)
     drawLabel('You have joined a group of temple robbers in their mission to steel artifacts from ancient temples.',
               app.width/2, app.height/4+50, fill='tan', size=18)
+    drawLabel('Go forth on your solo adventure through the temple maze, in search of these priceless artifacts.',
+              app.width/2, app.height/4+70, fill='tan', size=18)
+    drawLabel('As you run, BEWARE the monster!',
+              app.width/2, app.height/4+90, fill='tan', size=18)
+    drawLabel('They will be looking for every chance to eat you when you least expect it.',
+              app.width/2, app.height/4+110, fill='tan', size=18)
+    drawLabel('Rules',
+              app.width/2, app.height/4+150, fill='tan', size=25, bold=True)
+    drawLabel('You often forget to go to the gym, so you can only carry 10 kg worth of artifacts at a time.',
+              app.width/2, app.height/4+170, fill='tan', size=18)
+    drawLabel('You must bring the artifacts back to your cart, located at the start of the maze',
+              app.width/2, app.height/4+190, fill='tan', size=18)
+    drawLabel('The artifacts have broken over time. For every 10kg you drop off, you will obtain 1 full artifact.',
+              app.width/2, app.height/4+210, fill='tan', size=18)
 
 def drawPauseScreen(app):
     drawRect(0, app.height/5, app.width, app.height, fill='saddleBrown')

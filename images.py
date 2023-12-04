@@ -30,8 +30,12 @@ sadFace = Image.open('images/sadFace.png')
 sadFace = CMUImage(sadFace)
 
 # CITATION: https://www.models-resource.com/resources/big_icons/21/20777.png?updated=1501277066
-mainChar = Image.open('images/mainChar.png')
-mainChar = CMUImage(mainChar)
+guyDanger = Image.open('images/guyDanger.png')
+guyDanger = CMUImage(guyDanger)
+
+# CITATION: http://vgame.vivas.vn/index.php?r=content%2Fdetail&contentid=6698
+karmaLee = Image.open('images/karmaLee.png')
+karmaLee = CMUImage(karmaLee)
 
 # CITATION: https://dragoart.com/tut/how-to-draw-an-evil-demon-monkey-from-temple-run-17074
 monster = Image.open('images/monster.png')
