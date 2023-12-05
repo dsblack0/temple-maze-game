@@ -123,7 +123,7 @@ def onKeyPress(app, key):
 
 def onMousePress(app, mx, my):
     # when game not yet started
-    if not app.gameStarted:
+    if not app.gameStarted and not app.gameOver:
         if app.instructions.pressButton(mx, my):
             app.showInstructions = not app.showInstructions
         elif app.startGame.pressButton(mx, my):
@@ -178,7 +178,8 @@ def onMousePress(app, mx, my):
     # when game over
     else:
         if app.restartEndGame.pressButton(mx, my):
-            restartGame(app)
+            app.gameStarted = False
+            app.gameOver = False
             music.emeraldCity.pause()
             music.skySummit.play(loop = True)
 
