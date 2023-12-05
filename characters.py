@@ -166,8 +166,9 @@ def generateMonsters(count, monsters = []):
         # randomly choose a valid location
         r, c = random.choice(validLocations)
         # create new monster placed at that location
-        newMonster = Monster(r,c)
-        monsters.append(newMonster)
+        if (r, c) not in maze.wallLocations():
+            newMonster = Monster(r,c)
+            monsters.append(newMonster)
         return generateMonsters(count, monsters)
     
 class Artifact(Character):

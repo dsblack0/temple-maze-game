@@ -15,7 +15,7 @@ def getCXCY(i):
 def drawLevelMenu(app):
     guides.drawBackground(app, 1)
     app.close.draw()
-    levels = [20, 60, 100, 150]
+    levels = [20, 100, 150, 250]
     levelImages = [images.level0, images.level1, images.level2, images.level3]
 
     for i in range(len(levels)):
@@ -31,7 +31,7 @@ def drawLevelMenu(app):
         drawImage(image, cX, cY, width=195, height=295, align='center')
 
 def selectLevel(mx, my):
-    levels = [20, 60, 100, 150]
+    levels = [20, 100, 150, 250]
     
     for i in range(len(levels)):
         cX, cY = getCXCY(i)

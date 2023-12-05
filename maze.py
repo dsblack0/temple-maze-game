@@ -11,8 +11,8 @@ class Grid:
         self.height = app.height - self.top - self.margin
         self.rows = 15
         self.cols = 15
-        self.pathsCount = 150
-        self.maze = Grid.timeLimit(self.generateMaze)
+        self.pathsCount = 140
+        self.maze = self.generateMaze()
         '''WORK IN PROGRESS TO INCREASE MAZE GENERATION EFFICIENCY'''
         if not self.maze:
             print('switch')
@@ -49,7 +49,7 @@ class Grid:
             random.shuffle(directions)
             for drow, dcol in directions:
                 nextRow, nextCol = currRow+drow, currCol+dcol
-                #print('Generating Maze...', self.pathsCount)
+                # print('Generating Maze...', app.pathsCount)
                 if ((0<=nextRow<self.rows) and (0<=nextCol<self.cols) and
                     (maze[nextRow][nextCol] == False)):
                         maze[currRow][currCol] = True

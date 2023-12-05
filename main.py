@@ -29,7 +29,6 @@ def onAppStart(app):
     buttons.initializeButtons(app)
 
 def restartGame(app):
-    app.stepsPerSecond = 20
     app.timer = 0
     app.gameOver = False
     app.paused = False
@@ -39,7 +38,7 @@ def restartGame(app):
     app.showSpinner = False
     app.spinning = False
 
-    app.gameStarted = False
+    app.gameStarted = True
     app.grid = maze.Grid()
     app.mainChar = characters.MainChar(0, 0)
     app.monsters = characters.generateMonsters(2)
@@ -63,7 +62,6 @@ def checkForCapture(app):
                 app.highScore = app.score
 
 def onStep(app):
-    print(app.stepsPerSecond)
     # when playing game
     if app.gameStarted and not app.gameOver and not app.paused:
         # move monsters
