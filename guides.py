@@ -1,5 +1,5 @@
 from cmu_graphics import *
-import images, powerups, charMenu
+import images, powerups, charMenu, levelMenu
 
 def drawBackground(app, num):
     if num == 1:
@@ -52,6 +52,7 @@ def drawGameStart(app):
               fill='saddleBrown', size=90, bold=True, font='monospace')
     app.startGame.draw()
     app.instructions.draw()
+    app.openLevelMenu.draw()
 
 def drawInGame(app):
     drawInGameButtons(app)
@@ -78,16 +79,19 @@ def drawInstructions(app):
               app.width/2, app.height/4+190, fill='tan', size=18)
     drawLabel('The artifacts have broken over time. For every 10kg you drop off, you will obtain 1 full artifact.',
               app.width/2, app.height/4+210, fill='tan', size=18)
-    app.openCharacters.draw()
+    app.openCharMenu.draw()
 
 def drawPauseScreen(app):
     drawRect(0, app.height/5, app.width, app.height, fill='saddleBrown')
     drawLabel('Paused', app.width/2, app.height/2, 
               fill='tan', size=100, font='monospace')
-    app.openCharacters.draw()
+    app.openCharMenu.draw()
 
 def drawCharacterMenu(app):
     charMenu.drawCharacterMenu(app)
+
+def drawLevelMenu(app):
+    levelMenu.drawLevelMenu(app)
 
 def drawScoreBox(app):
     drawRect(app.width-150, 20, app.width/4, app.height/6, 

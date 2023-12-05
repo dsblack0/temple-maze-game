@@ -1,12 +1,13 @@
 from cmu_graphics import *
 import random
 import maze, buttons, music, images
-import characters, guides, powerups, charMenu
+import characters, guides, powerups, charMenu, levelMenu
 
 
 def onAppStart(app):
     app.width = 800
     app.height = 800
+    app.stepsPerSecond = 20
     app.setMaxShapeCount(100000)
     app.spinner = ['WallWalk', 'Invis', None, 
                    'newChar', 'WallWalk', 'Gem']
@@ -24,6 +25,7 @@ def onAppStart(app):
     app.showSpinner = False
     app.showInstructions = False
     app.characterMenu = False
+    app.showLevelMenu = False
     buttons.initializeButtons(app)
 
 def restartGame(app):
@@ -33,10 +35,11 @@ def restartGame(app):
     app.paused = False
     app.showInstructions = False
     app.characterMenu = False
+    app.showLevelMenu = False
     app.showSpinner = False
     app.spinning = False
 
-    app.gameStarted = True
+    app.gameStarted = False
     app.grid = maze.Grid()
     app.mainChar = characters.MainChar(0, 0)
     app.monsters = characters.generateMonsters(2)
@@ -60,6 +63,7 @@ def checkForCapture(app):
                 app.highScore = app.score
 
 def onStep(app):
+    print(app.stepsPerSecond)
     # when playing game
     if app.gameStarted and not app.gameOver and not app.paused:
         # move monsters
@@ -123,6 +127,12 @@ def onMousePress(app, mx, my):
             restartGame(app)
             music.emeraldCity.pause()
             music.skySummit.play(loop = True)
+        elif app.openLevelMenu.pressButton(mx, my):
+            app.showLevelMenu = True
+        if app.showLevelMenu:
+            levelMenu.selectLevel(mx, my)
+            if app.close.pressButton(mx, my):
+                app.showLevelMenu = False
     # when game started
     elif not app.gameOver:
         if app.instructions.pressButton(mx, my):
@@ -164,10 +174,10 @@ def onMousePress(app, mx, my):
             restartGame(app)
             music.emeraldCity.pause()
             music.skySummit.play(loop = True)
-            app.gameStarted = False
 
-    if (app.showInstructions or app.paused) and not app.showSpinner:
-        if app.openCharacters.pressButton(mx, my):
+    if ((app.showInstructions or (app.gameStarted and app.paused)) and
+        not app.showSpinner):
+        if app.openCharMenu.pressButton(mx, my):
             app.characterMenu = True
         if app.characterMenu:
             charMenu.selectCharacter(mx, my)
@@ -186,6 +196,8 @@ def redrawAll(app):
             guides.drawCharacterMenu(app)
         elif app.showInstructions:
             guides.drawInstructions(app)
+        elif app.showLevelMenu:
+            guides.drawLevelMenu(app)
     elif app.gameOver:
         guides.drawGameOver(app)
     else:

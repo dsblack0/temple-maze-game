@@ -45,4 +45,5 @@ def initializeButtons(app):
     app.openSpinner = Button(app.width/4+30, 130, 15, '', 'circle')
     app.close = Button(app.width-100, 20+app.height/24, app.width/30, 'X', 'circle')
     app.spinSpinner = Button(app.width/2, app.height*3/4+100, 50, 'Spin!', 'rect')
-    app.openCharacters = app.restartEndGame = Button(app.width/2, app.height-100, 50, 'Switch Character', 'rect', 'long')
+    app.openCharMenu = Button(app.width/2, app.height-100, 50, 'Switch Character', 'rect', 'long')
+    app.openLevelMenu = Button(app.width/2, app.height-100, 50, 'Select Level', 'rect', 'long')

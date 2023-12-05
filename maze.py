@@ -22,17 +22,20 @@ class Grid:
     # CITATION: Code for timings out function call from https://stackoverflow.com/questions/492519/timeout-on-a-function-call
     @staticmethod
     def timeLimit(mazeFunction):
-        p = multiprocessing.Process(target=mazeFunction)
-        p.start()
-        # Wait for 10 seconds or until process finishes
-        p.join(5)
-        # If thread is still active
-        if p.is_alive():
-            # Terminate - may not work if process is stuck for good
-            p.terminate()
-            p.join()
+        if __name__ == '__main__':
+            # Start function as a process
+            p = multiprocessing.Process(target=mazeFunction)
+            p.start()
+            # Wait for 10 seconds or until process finishes
+            p.join(20)
+            # If thread is still active
+            if p.is_alive():
+                # Terminate - may not work if process is stuck for good
+                p.terminate()
+                p.join()
 
     def generateMaze(self):
+        print('generating maze', self.pathsCount)
         maze = [[False]*self.cols for _ in range(self.rows)]
         maze[0][0] = True
         return self.createMazePattern(maze, 0, 0, 0)

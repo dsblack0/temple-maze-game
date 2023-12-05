@@ -1,6 +1,7 @@
 from cmu_graphics import *
 from PIL import Image
 
+### Designs
 # CITATION: https://www.istockphoto.com/photos/desert-ground
 background1 = Image.open('images/background1.jpg')
 background1 = CMUImage(background1)
@@ -29,6 +30,7 @@ gem = CMUImage(gem)
 sadFace = Image.open('images/sadFace.png')
 sadFace = CMUImage(sadFace)
 
+### Characters
 # CITATION: https://www.models-resource.com/resources/big_icons/21/20777.png?updated=1501277066
 guyDanger = Image.open('images/guyDanger.png')
 guyDanger = CMUImage(guyDanger)
@@ -48,6 +50,7 @@ franciscoMontoya = CMUImage(franciscoMontoya)
 lockedChar = Image.open('images/lockedChar.png')
 lockedChar = CMUImage(lockedChar)
 
+### Extra Characters
 # CITATION: https://dragoart.com/tut/how-to-draw-an-evil-demon-monkey-from-temple-run-17074
 monster = Image.open('images/monster.png')
 monster = CMUImage(monster)
@@ -56,6 +59,20 @@ monster = CMUImage(monster)
 cart = Image.open('images/cart.png')
 cart = CMUImage(cart)
 
+### Level Icons
+level0 = Image.open('images/level0.png')
+level0 = CMUImage(level0)
+
+level1 = Image.open('images/level1.png')
+level1 = CMUImage(level1)
+
+level2 = Image.open('images/level2.png')
+level2 = CMUImage(level2)
+
+level3 = Image.open('images/level3.png')
+level3 = CMUImage(level3)
+
+### Artifacts
 # CITATION: https://solaralberta.ca/2021/06/25/religion-culture-and-the-sun/
 artifact1 = Image.open('images/artifact1.png')
 artifact1 = CMUImage(artifact1)
