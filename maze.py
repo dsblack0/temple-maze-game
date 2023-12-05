@@ -11,8 +11,8 @@ class Grid:
         self.height = app.height - self.top - self.margin
         self.rows = 15
         self.cols = 15
-        self.pathsCount = 140
-        self.maze = self.generateMaze()
+        self.pathsCount = 150
+        self.maze = Grid.timeLimit(self.generateMaze)
         '''WORK IN PROGRESS TO INCREASE MAZE GENERATION EFFICIENCY'''
         if not self.maze:
             print('switch')
@@ -22,14 +22,19 @@ class Grid:
     # CITATION: Code for timings out function call from https://stackoverflow.com/questions/492519/timeout-on-a-function-call
     @staticmethod
     def timeLimit(mazeFunction):
+        # __name__ = '__main__'
         if __name__ == '__main__':
             # Start function as a process
+            print('check1')
             p = multiprocessing.Process(target=mazeFunction)
             p.start()
+            print('check2')
             # Wait for 10 seconds or until process finishes
-            p.join(20)
+            p.join(timeout=20)
             # If thread is still active
+            print('check3')
             if p.is_alive():
+                print('killing')
                 # Terminate - may not work if process is stuck for good
                 p.terminate()
                 p.join()

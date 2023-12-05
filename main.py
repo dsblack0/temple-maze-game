@@ -56,10 +56,16 @@ def checkForCapture(app):
         if maze.doOverlap(app, monster.posX, monster.posY,
                            app.mainChar.posX, app.mainChar.posY):
             app.gameOver = True
-            music.skySummit.pause()
-            music.emeraldCity.play(loop = True)
+            messages = ["You life ambition was to become lunch?",
+                        "Imagine working so hard to get eaten...",
+                        "IDK if I ever even had faith in you...",
+                        "Lovely...you died..."]
+            app.endMessage = random.choice(messages)
             if app.score > app.highScore:
                 app.highScore = app.score
+                app.endMessage = "Ah beat high scores...I'll pretend to be proud..."
+            music.skySummit.pause()
+            music.emeraldCity.play(loop = True)
 
 def onStep(app):
     # when playing game
@@ -166,6 +172,9 @@ def onMousePress(app, mx, my):
                 powerups.Powerup.powerupTimer = 0
         if app.pause.pressButton(mx, my):
             app.paused = not app.paused
+            messages = ["Wow...already taking a break...", "You're lazier than I thought...",
+                "Don't tell me you're still here...", "Ummmm don't you want money..."]
+            app.pauseMessage = random.choice(messages)
     # when game over
     else:
         if app.restartEndGame.pressButton(mx, my):

@@ -67,24 +67,43 @@ def drawInstructions(app):
               app.width/2, app.height/4+50, fill='tan', size=18)
     drawLabel('Go forth on your solo adventure through the temple maze, in search of these priceless artifacts.',
               app.width/2, app.height/4+70, fill='tan', size=18)
-    drawLabel('As you run, BEWARE the monster!',
+    drawLabel("As you run, BEWARE the monster! You're a crunchy human...",
               app.width/2, app.height/4+90, fill='tan', size=18)
     drawLabel('They will be looking for every chance to eat you when you least expect it.',
               app.width/2, app.height/4+110, fill='tan', size=18)
     drawLabel('Rules',
               app.width/2, app.height/4+150, fill='tan', size=25, bold=True)
-    drawLabel('You often forget to go to the gym, so you can only carry 10 kg worth of artifacts at a time.',
-              app.width/2, app.height/4+170, fill='tan', size=18)
-    drawLabel('You must bring the artifacts back to your cart, located at the start of the maze',
-              app.width/2, app.height/4+190, fill='tan', size=18)
-    drawLabel('The artifacts have broken over time. For every 10kg you drop off, you will obtain 1 full artifact.',
-              app.width/2, app.height/4+210, fill='tan', size=18)
+    drawLabel('1. You often forget to go to the gym, so you can only carry 10 kg worth of artifacts at a time.',
+              25, app.height/4+190, fill='tan', size=18, align='left')
+    drawLabel('2. You must bring the artifacts back to your cart, located at the start of the maze',
+              25, app.height/4+210, fill='tan', size=18, align='left')
+    drawLabel('3. The artifacts have broken over time. For every 10kg you drop off, you will obtain 1 full artifact.',
+              25, app.height/4+230, fill='tan', size=18, align='left')
+    drawLabel("4. There are gems scattered through the temple's maze. Use them to spin the wheel of secrets!",
+              25, app.height/4+250, fill='tan', size=18, align='left')
+    drawLabel('Guides',
+              app.width/2, app.height/4+290, fill='tan', size=25, bold=True)
+    drawLabel('1. Use the arrow keys to navigate around the maze.',
+              25, app.height/4+330, fill='tan', size=18, align='left')
+    drawLabel('2. Use the space bar to pick up & drop off gems/artifact pieces.',
+              25, app.height/4+350, fill='tan', size=18, align='left')
+    drawLabel('Note: You will drop off one artifact piece each time you press the space bar',
+              50, app.height/4+370, fill='tan', size=18, align='left', italic=True)
+    drawLabel('3. Use the power ups box to activate powers & access the wheel of secrets.',
+              25, app.height/4+390, fill='tan', size=18, align='left')
+    drawLabel("4. TO LOAD TEST DEFAULTS: Press 't' before starting the game",
+              25, app.height/4+410, fill='tan', size=18, align='left')
+    drawLabel("Note: Not to be used for regular game play",
+              50, app.height/4+430, fill='tan', size=18, align='left', italic=True)
     app.openCharMenu.draw()
 
 def drawPauseScreen(app):
+    
     drawRect(0, app.height/5, app.width, app.height, fill='saddleBrown')
     drawLabel('Paused', app.width/2, app.height/2, 
               fill='tan', size=100, font='monospace')
+    drawLabel(app.pauseMessage, app.width/2, app.height/2+150, 
+              fill='tan', size=38, font='monospace', bold=True, italic=True)
     app.openCharMenu.draw()
 
 def drawCharacterMenu(app):
@@ -116,4 +135,7 @@ def drawGameOver(app):
     drawBackground(app, 1)
     drawLabel('Game Over', app.width/2, app.height/2, 
               fill='saddleBrown', bold=True, size=100, font='monospace')
+    drawRect(app.width/2, app.height/2+150, app.width, 50, fill='tan', align='center')
+    drawLabel(app.endMessage, app.width/2, app.height/2+150, 
+              fill='saddleBrown', size=25, font='monospace', bold=True, italic=True)
     app.restartEndGame.draw()
