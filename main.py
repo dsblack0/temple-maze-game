@@ -1,6 +1,7 @@
 from cmu_graphics import *
 import random
-import maze, characters, guides, buttons, powerups, music
+import maze, buttons, music, images
+import characters, guides, powerups, charMenu
 
 
 def onAppStart(app):
@@ -8,16 +9,21 @@ def onAppStart(app):
     app.height = 800
     app.setMaxShapeCount(100000)
     app.spinner = ['WallWalk', 'Invis', None, 
-                   'Invis', 'WallWalk', 'Gem']
+                   'newChar', 'WallWalk', 'Gem']
     
     # initialze score, gems & powerups to last whole game
     app.highScore = 0
     app.heldGems = 0
     app.powerups = []
+    app.characters = [images.karmaLee]
+    app.currChar = 0
+
     app.gameStarted = False
     app.gameOver = False
     app.paused = True
+    app.showSpinner = False
     app.showInstructions = False
+    app.characterMenu = False
     buttons.initializeButtons(app)
 
 def restartGame(app):
@@ -26,6 +32,7 @@ def restartGame(app):
     app.gameOver = False
     app.paused = False
     app.showInstructions = False
+    app.characterMenu = False
     app.showSpinner = False
     app.spinning = False
 
@@ -130,7 +137,7 @@ def onMousePress(app, mx, my):
             music.skySummit.pause()
             music.emeraldCity.play(loop = True)
         elif app.showSpinner == True:
-            if app.closeSpinner.pressButton(mx, my):
+            if app.close.pressButton(mx, my):
                 app.showSpinner = False
                 app.paused = False
             elif app.spinSpinner.pressButton(mx, my) and app.heldGems > 0:
@@ -159,6 +166,14 @@ def onMousePress(app, mx, my):
             music.skySummit.play(loop = True)
             app.gameStarted = False
 
+    if (app.showInstructions or app.paused) and not app.showSpinner:
+        if app.openCharacters.pressButton(mx, my):
+            app.characterMenu = True
+        if app.characterMenu:
+            charMenu.selectCharacter(mx, my)
+            if app.close.pressButton(mx, my):
+                app.characterMenu = False
+
 def onKeyHold(app, keys):
     # call onKeyHold from MainChar class
     if not app.gameOver and not app.paused:
@@ -167,13 +182,17 @@ def onKeyHold(app, keys):
 def redrawAll(app):
     if not app.gameStarted:
         guides.drawGameStart(app)
-        if app.showInstructions:
+        if app.characterMenu:
+            guides.drawCharacterMenu(app)
+        elif app.showInstructions:
             guides.drawInstructions(app)
     elif app.gameOver:
         guides.drawGameOver(app)
     else:
         guides.drawBackground(app, 1)
-        if app.showInstructions:
+        if app.characterMenu:
+            guides.drawCharacterMenu(app)
+        elif app.showInstructions:
             guides.drawInstructions(app)
         elif app.showSpinner:
             powerups.drawSpinner(app)
@@ -190,7 +209,8 @@ def redrawAll(app):
                 artifact.draw()
             if app.gem:
                 app.gem.draw()
-        guides.drawInGame(app)
+        if not app.characterMenu:
+            guides.drawInGame(app)
 
 def main():
     runApp()

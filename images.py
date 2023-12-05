@@ -37,6 +37,17 @@ guyDanger = CMUImage(guyDanger)
 karmaLee = Image.open('images/karmaLee.png')
 karmaLee = CMUImage(karmaLee)
 
+# CITATION: https://venturebeat.com/games/temple-run-2-review/
+scarlettFox = Image.open('images/scarlettFox.png')
+scarlettFox = CMUImage(scarlettFox)
+
+# CITATION: https://www.youtube.com/watch?app=desktop&v=occSvatkG1I&ab_channel=4PlayersOnly
+franciscoMontoya = Image.open('images/franciscoMontoya.png')
+franciscoMontoya = CMUImage(franciscoMontoya)
+
+lockedChar = Image.open('images/lockedChar.png')
+lockedChar = CMUImage(lockedChar)
+
 # CITATION: https://dragoart.com/tut/how-to-draw-an-evil-demon-monkey-from-temple-run-17074
 monster = Image.open('images/monster.png')
 monster = CMUImage(monster)

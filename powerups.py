@@ -1,5 +1,5 @@
 from cmu_graphics import *
-import images, guides
+import images, guides, characters
 
 class Powerup:
     spinTimer = 0
@@ -53,7 +53,7 @@ def labelLocation(i):
 
 def drawSpinner(app):
     guides.drawBackground(app, 2)
-    app.closeSpinner.draw()
+    app.close.draw()
     degree = 360 / len(app.spinner)
     for i in range(len(app.spinner)):
         section = app.spinner[i]
@@ -62,6 +62,12 @@ def drawSpinner(app):
         if section == 'Invis': image, label = Invis.image, Invis.name
         elif section == 'WallWalk': image, label = WallWalk.image, WallWalk.name
         elif section == 'Gem': image, label = images.gem, '+1 Gem'
+        elif section == 'newChar': 
+            if len(app.characters) < len(characters.Character.allCharacters):
+                img = len(app.characters)
+            else:
+                img = len(app.characters) - 1
+            image, label = characters.Character.allCharacters[img], 'NewCharacter'
         else: image, label = images.sadFace, 'Too Bad...'
         cx, cy = labelLocation(i)
         drawLabel(label, cx, cy, fill='tan', size=18)
@@ -82,3 +88,8 @@ def addPowerup(app):
         app.powerups.append(Invis())
     elif powerup == 'Gem':
         app.heldGems += 1
+    elif powerup == 'newChar':
+        if len(app.characters) < len(characters.Character.allCharacters):
+            newCharIndx = len(app.characters)
+            newChar = characters.Character.allCharacters[newCharIndx]
+            app.characters.append(newChar)

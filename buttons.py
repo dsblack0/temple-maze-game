@@ -1,18 +1,21 @@
 from cmu_graphics import *
 
 class Button:
-    def __init__(self, cX, cY, size, label, type):
+    def __init__(self, cX, cY, size, label, type, width='short'):
         self.cX = cX
         self.cY = cY
         self.size = size
         self.label = label
         self.type = type
+        self.width = width
 
     def draw(self):
         if self.type == 'rect':
-            drawRect(self.cX, self.cY, self.size*3,
+            if self.width=='long': width=self.size*7
+            else: width = self.size*3
+            drawRect(self.cX, self.cY, width,
                      self.size, fill='saddleBrown', align='center')
-            drawRect(self.cX, self.cY, self.size*3-5, self.size-5,
+            drawRect(self.cX, self.cY, width-5, self.size-5,
                      fill=None, border='tan', align='center')
         elif self.type == 'circle':
             drawCircle(self.cX, self.cY, self.size,
@@ -40,5 +43,6 @@ def initializeButtons(app):
     app.invisPowerup = Button(app.width/4+30, 50, 15, '', 'circle')
     app.wallPowerup = Button(app.width/4+30, 90, 15, '', 'circle')
     app.openSpinner = Button(app.width/4+30, 130, 15, '', 'circle')
-    app.closeSpinner = Button(app.width-100, 20+app.height/24, app.width/30, 'X', 'circle')
+    app.close = Button(app.width-100, 20+app.height/24, app.width/30, 'X', 'circle')
     app.spinSpinner = Button(app.width/2, app.height*3/4+100, 50, 'Spin!', 'rect')
+    app.openCharacters = app.restartEndGame = Button(app.width/2, app.height-100, 50, 'Switch Character', 'rect', 'long')

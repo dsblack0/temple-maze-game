@@ -3,6 +3,8 @@ import random
 import images, maze, powerups
 
 class Character:
+    allCharacters = [images.karmaLee, images.guyDanger, 
+                     images.scarlettFox, images.franciscoMontoya]
     def __init__(self, r, c):
         self.row = r
         self.col = c
@@ -74,7 +76,10 @@ class Character:
 class MainChar(Character):
     def __init__(self, r, c):
         super().__init__(r, c)
-        self.image = images.karmaLee
+        self.image = Character.allCharacters[app.currChar]
+
+    def updateImage(self):
+        self.image = Character.allCharacters[app.currChar]
 
     @staticmethod
     def validLocations():
