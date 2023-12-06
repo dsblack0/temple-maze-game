@@ -41,6 +41,7 @@ def restartGame(app):
 
     app.gameStarted = True
     app.grid = maze.Grid()
+    app.validLocations = characters.Character.validLocations()
     app.mainChar = characters.MainChar(0, 0)
     app.monsters = characters.generateMonsters(2)
     app.placedArtifacts = characters.generateArtifacts(3)
@@ -64,7 +65,7 @@ def checkForCapture(app):
             app.endMessage = random.choice(messages)
             if app.score > app.highScore:
                 app.highScore = app.score
-                app.endMessage = "Ah beat high scores...I'll pretend to be proud..."
+                app.endMessage = "Ah beat the high score...I'll pretend to be proud..."
             music.skySummit.pause()
             music.emeraldCity.play(loop = True)
 

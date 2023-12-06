@@ -175,9 +175,8 @@ def generateMonsters(count, monsters = []):
     if len(monsters) == count:
         return monsters
     else:
-        validLocations = Monster.validLocations()
         # randomly choose a valid location
-        r, c = random.choice(validLocations)
+        r, c = random.choice(app.validLocations)
         # create new monster placed at that location
         if (r, c) not in maze.wallLocations():
             newMonster = Monster(r,c)
@@ -206,12 +205,12 @@ def generateArtifacts(count, artifacts=[]):
     if len(artifacts) == count:
         return artifacts
     else:
-        validLocations = Artifact.validLocations()
         # randomly choose a valid location
-        r, c = random.choice(validLocations)
+        r, c = random.choice(app.validLocations)
         # create new artifact placed at that location
-        newArtifact = Artifact(r,c)
-        artifacts.append(newArtifact)
+        if (r, c) not in maze.wallLocations():
+            newArtifact = Artifact(r,c)
+            artifacts.append(newArtifact)
         return generateArtifacts(count, artifacts)
     
 class Gem(Character):

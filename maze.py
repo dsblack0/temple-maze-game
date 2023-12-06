@@ -1,5 +1,5 @@
 from cmu_graphics import *
-import random, multiprocessing
+import random, func_timeout
 import images
 
 class Grid:
@@ -12,32 +12,21 @@ class Grid:
         self.rows = 15
         self.cols = 15
         self.pathsCount = 150
-        self.maze = Grid.timeLimit(self.generateMaze)
+        self.maze = Grid.limitFTime(self.generateMaze, 10, None)
         '''WORK IN PROGRESS TO INCREASE MAZE GENERATION EFFICIENCY'''
-        if not self.maze:
+        while not self.maze:
             print('switch')
             self.pathsCount -= 10
-            self.maze = self.generateMaze()
+            self.maze = Grid.limitFTime(self.generateMaze, 10, None)
 
-    # CITATION: Code for timings out function call from https://stackoverflow.com/questions/492519/timeout-on-a-function-call
+    # CITATION: Code for limiting run time of function call from https://blog.finxter.com/how-to-limit-the-execution-time-of-a-function-call/
     @staticmethod
-    def timeLimit(mazeFunction):
-        # __name__ = '__main__'
-        if __name__ == '__main__':
-            # Start function as a process
-            print('check1')
-            p = multiprocessing.Process(target=mazeFunction)
-            p.start()
-            print('check2')
-            # Wait for 10 seconds or until process finishes
-            p.join(timeout=20)
-            # If thread is still active
-            print('check3')
-            if p.is_alive():
-                print('killing')
-                # Terminate - may not work if process is stuck for good
-                p.terminate()
-                p.join()
+    def limitFTime(f, max_wait, default_value):
+        try:
+            return func_timeout.func_timeout(max_wait, f)
+        except func_timeout.FunctionTimedOut:
+            pass
+        return default_value
 
     def generateMaze(self):
         print('generating maze', self.pathsCount)
