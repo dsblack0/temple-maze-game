@@ -240,6 +240,8 @@ def redrawAll(app):
             guides.drawInstructions(app)
         elif app.showSpinner:
             powerups.drawSpinner(app)
+        elif app.paused:
+            guides.drawPauseScreen(app)
         else:
             maze.drawGrid(app)
             app.mainChar.draw()
