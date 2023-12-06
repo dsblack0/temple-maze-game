@@ -37,13 +37,13 @@ class Character:
         cellW, cellH = maze.getCellSize(app)
         # move col & row based on direction
         if direction == 'left':
-            self.posX -= 11.5*speed
+            self.posX -= cellW/4*speed
         elif direction == 'right':
-            self.posX += 11.5*speed
+            self.posX += cellW/4*speed
         elif direction == 'up':
-            self.posY -= 13*speed
+            self.posY -= cellH/3*speed
         elif direction == 'down':
-            self.posY += 13*speed
+            self.posY += cellH/3*speed
         self.updateRowCol() 
         # undo move if not valid location
         indx = powerups.findPowerup(powerups.WallWalk)
@@ -170,7 +170,10 @@ class Monster(Character):
             directions.remove(direction)
             self.moveOnStep(directions)
 
-def generateMonsters(count, monsters = []):
+def generateMonsters(count):
+    return generateMonstersHelper(count, [])
+
+def generateMonstersHelper(count, monsters):
     # create monsters until reach desired count
     if len(monsters) == count:
         return monsters
@@ -179,10 +182,9 @@ def generateMonsters(count, monsters = []):
         # randomly choose a valid location
         r, c = random.choice(validLocations)
         # create new monster placed at that location
-        if (r, c) not in maze.wallLocations():
-            newMonster = Monster(r,c)
-            monsters.append(newMonster)
-        return generateMonsters(count, monsters)
+        newMonster = Monster(r,c)
+        monsters.append(newMonster)
+        return generateMonstersHelper(count, monsters)
     
 class Artifact(Character):
     # initialize weights of each artifact piece
@@ -202,7 +204,10 @@ class Artifact(Character):
             drawLabel(Artifact.weights[self.image], posX+width/2, 
                       posY+height/2, fill='saddleBrown', size=width/2, bold=True)
 
-def generateArtifacts(count, artifacts=[]):
+def generateArtifacts(count):
+    return generateArtifactsHelper(count, [])
+
+def generateArtifactsHelper(count, artifacts):
     if len(artifacts) == count:
         return artifacts
     else:
@@ -210,10 +215,9 @@ def generateArtifacts(count, artifacts=[]):
         # randomly choose a valid location
         r, c = random.choice(validLocations)
         # create new artifact placed at that location
-        if (r, c) not in maze.wallLocations():
-            newArtifact = Artifact(r,c)
-            artifacts.append(newArtifact)
-        return generateArtifacts(count, artifacts)
+        newArtifact = Artifact(r,c)
+        artifacts.append(newArtifact)
+        return generateArtifactsHelper(count, artifacts)
     
 class Gem(Character):
     def __init__(self, r, c):

@@ -42,7 +42,10 @@ def restartGame(app):
     app.gameStarted = True
     app.grid = maze.Grid()
     app.mainChar = characters.MainChar(0, 0)
+    # empty monster & artifacts lists on restart to regenerate
+    app.monsters = []
     app.monsters = characters.generateMonsters(2)
+    app.placedArtifacts = []
     app.placedArtifacts = characters.generateArtifacts(3)
     app.heldArtifacts = []
     app.gem = characters.generateGem()
@@ -80,7 +83,8 @@ def onStep(app):
             checkForCapture(app)
         # generate new artifacts each time pick up one
         if len(app.placedArtifacts) < 2:
-            characters.generateArtifacts(2)
+            newArtifact = characters.generateArtifacts(1)
+            app.placedArtifacts.extend(newArtifact)
         # move held artifacts with main char
         for artifact in app.heldArtifacts:
             artifact.posX, artifact.posY = app.mainChar.posX, app.mainChar.posY
