@@ -14,6 +14,7 @@ background2 = CMUImage(background2)
 walls = Image.open('images/walls.jpg')
 walls = CMUImage(walls)
 
+### Powerups
 # CITATION: https://templerun.fandom.com/wiki/Invincibility
 invis = Image.open('images/invis.png')
 invis = CMUImage(invis)
@@ -33,6 +34,10 @@ gem = CMUImage(gem)
 # CITATION: https://www.dictionary.com/e/emoji/crying-face-emoji/
 sadFace = Image.open('images/sadFace.png')
 sadFace = CMUImage(sadFace)
+
+# CITATION: https://unsplash.com/s/photos/old-book
+guide = Image.open('images/guide.png')
+guide = CMUImage(guide)
 
 ### Characters
 # CITATION: https://www.models-resource.com/resources/big_icons/21/20777.png?updated=1501277066
