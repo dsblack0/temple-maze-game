@@ -42,6 +42,7 @@ def initializeButtons(app):
     app.startGame = Button(app.width/2, app.height/2+200, 50, 'Start', 'rect')
     app.invisPowerup = Button(app.width/4+30, 50, 15, '', 'circle')
     app.wallPowerup = Button(app.width/4+30, 90, 15, '', 'circle')
+    app.magnetPowerup = Button(app.width/3+80, 50, 15, '', 'circle')
     app.openSpinner = Button(app.width/4+30, 130, 15, '', 'circle')
     app.close = Button(app.width-100, 20+app.height/24, app.width/30, 'X', 'circle')
     app.spinSpinner = Button(app.width/2, app.height*3/4+100, 50, 'Spin!', 'rect')

@@ -30,6 +30,14 @@ class Invis(Powerup):
         super().__init__()
         Invis.count += 1
 
+class Magnet(Powerup):
+    count = 0
+    name = 'Magnet'
+    image = images.magnet
+    def __init__(self):
+        super().__init__()
+        Magnet.count += 1
+
 # CITATION: based on code from CS Academy 4.2.8 List Methods
 def findPowerup(powerup):
     for i in range(len(app.powerups)):
@@ -61,6 +69,7 @@ def drawSpinner(app):
                 i*degree, degree, fill='saddleBrown', border='tan')
         if section == 'Invis': image, label = Invis.image, Invis.name
         elif section == 'WallWalk': image, label = WallWalk.image, WallWalk.name
+        elif section == 'Magnet': image, label = Magnet.image, Magnet.name
         elif section == 'Gem': image, label = images.gem, '+1 Gem'
         elif section == 'newChar': 
             if len(app.characters) < len(characters.Character.allCharacters):
@@ -86,6 +95,8 @@ def addPowerup(app):
         app.powerups.append(WallWalk())
     elif powerup == 'Invis':
         app.powerups.append(Invis())
+    elif powerup == 'Magnet':
+        app.powerups.append(Magnet())
     elif powerup == 'Gem':
         app.heldGems += 1
     elif powerup == 'newChar':

@@ -4,7 +4,7 @@ import images
 
 class Grid:
     def __init__(self):
-        self.top = app.width/5
+        self.top = app.height/5
         self.margin = 50
         self.left = self.margin
         self.width = app.width - 2*self.margin

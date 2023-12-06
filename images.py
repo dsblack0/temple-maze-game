@@ -18,6 +18,10 @@ walls = CMUImage(walls)
 invis = Image.open('images/invis.png')
 invis = CMUImage(invis)
 
+# CITATION: https://templerun.fandom.com/wiki/Coin_Magnet
+magnet = Image.open('images/magnet.png')
+magnet = CMUImage(magnet)
+
 # CITATION: https://stock.adobe.com/images/board-game-color-spinner-vector-illustration-icon-symbol-graphic/249920162
 spin = Image.open('images/spin.png')
 spin = CMUImage(spin)

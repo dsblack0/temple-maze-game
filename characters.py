@@ -114,9 +114,22 @@ class MainChar(Character):
                 for artifact in app.placedArtifacts:
                     artifactWeight = Artifact.weights[artifact.image]
                     # if at artifact location, pick up if total weight not over 10
-                    if (maze.doOverlap(app, self.posX, self.posY, artifact.posX, 
-                                        artifact.posY) and
-                        (app.heldWeight + artifactWeight <= 10)):
+                    if maze.doOverlap(app, self.posX, self.posY, artifact.posX, 
+                                        artifact.posY):
+                        # control max weight
+                        if app.heldWeight + artifactWeight <= 10:
+                            app.heldArtifacts.append(artifact)
+                            app.placedArtifacts.remove(artifact)
+                            app.heldWeight += artifactWeight
+                        else:
+                            app.maxWeightMsg = True
+                            app.weightMsgTimer = 0
+                    # if Magnet powerup activated
+                    indx = powerups.findPowerup(powerups.Magnet)
+                    dX, dY = maze.getCellSize(app)
+                    if ((indx != -1) and (app.powerups[indx].activated)):
+                        if ((self.row-4 <= artifact.row <= self.row+4) and
+                            (self.col-4 <= artifact.col <= self.col+4)):
                             app.heldArtifacts.append(artifact)
                             app.placedArtifacts.remove(artifact)
                             app.heldWeight += artifactWeight

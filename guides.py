@@ -34,14 +34,20 @@ def drawPowerupBox(app):
     drawLabel('Get Powerups!',
               app.width/4+47, 130, size=12, fill='saddleBrown', align='left')
     drawImage(images.spin, app.width/4+30, 130, width=10, height=10, align='center')
-    drawImage(images.gem, app.width/3+80, 50, 
+    app.magnetPowerup.draw()
+    drawLabel(f'{powerups.Magnet.name} x{powerups.Magnet.count}',
+              app.width/3+97, 50, size=12, fill='saddleBrown', align='left')
+    drawImage(powerups.Magnet.image, app.width/3+80, 50,
+              width=10, height=10, align='center')
+    drawImage(images.gem, app.width/3+80, 90, 
               width=15, height=15, align='center')
     drawLabel(f'x{app.heldGems}', 
-              app.width/3+92, 50, size=15, fill='saddleBrown', align='left')
+              app.width/3+92, 90, size=15, fill='saddleBrown', align='left')
     for powerup in app.powerups:
         if powerup.activated:
-            timer = (100-powerups.Powerup.powerupTimer) // app.stepsPerSecond + 1
-            drawLabel(f'Powerup: {timer}s',
+            totalTime = 2.5*app.stepsPerSecond
+            timer = (totalTime-powerups.Powerup.powerupTimer) // (app.stepsPerSecond/2) + 1
+            drawLabel(f'Powerup: {int(timer)}s',
                       app.width/3+80, 130, size=15, fill='saddleBrown', align='left')
 
 def drawGameStart(app):
@@ -111,6 +117,16 @@ def drawCharacterMenu(app):
 
 def drawLevelMenu(app):
     levelMenu.drawLevelMenu(app)
+
+def drawMaxWeightMsg(app):
+    drawRect(app.width/2, 100, app.width/2, app.height/8, 
+             fill='saddleBrown', align='center')
+    drawRect(app.width/2, 100, app.width/2-10, app.height/8-10, 
+             fill=None, border='tan', align='center')
+    drawLabel("Applied to be a temple robber...", app.width/2, 85, 
+              size=20, fill='tan', font='monospace', bold=True)
+    drawLabel("but can only pick up 10kg...", app.width/2, 115, 
+              size=20, fill='tan', font='monospace', bold=True)
 
 def drawScoreBox(app):
     drawRect(app.width-150, 20, app.width/4, app.height/6, 

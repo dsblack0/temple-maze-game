@@ -10,7 +10,7 @@ def onAppStart(app):
     app.stepsPerSecond = 20
     app.setMaxShapeCount(100000)
     app.spinner = ['WallWalk', 'Invis', None, 
-                   'newChar', 'WallWalk', 'Gem']
+                   'newChar', 'Magnet', 'Gem']
     
     # initialze score, gems & powerups to last whole game
     app.highScore = 0
@@ -33,6 +33,7 @@ def restartGame(app):
     app.gameOver = False
     app.paused = False
     app.showInstructions = False
+    app.maxWeightMsg = False
     app.characterMenu = False
     app.showLevelMenu = False
     app.showSpinner = False
@@ -83,11 +84,15 @@ def onStep(app):
         # move held artifacts with main char
         for artifact in app.heldArtifacts:
             artifact.posX, artifact.posY = app.mainChar.posX, app.mainChar.posY
+        if app.maxWeightMsg:
+            app.weightMsgTimer += 1
+            if app.weightMsgTimer > app.stepsPerSecond:
+                app.maxWeightMsg = False
         for powerup in app.powerups:
             if isinstance(powerup, powerups.WallWalk) and powerup.activated:
                 powerups.Powerup.powerupTimer += 1
-                # disable powerup after 10 seconds
-                if powerups.Powerup.powerupTimer > 100:
+                # disable powerup after 5 seconds
+                if powerups.Powerup.powerupTimer > 2.5*app.stepsPerSecond:
                     app.powerups.remove(powerup)
                     powerup.activated = False
                     validLocations = characters.MainChar.validLocations()
@@ -100,8 +105,14 @@ def onStep(app):
                     app.mainChar.updatePosition()
             elif isinstance(powerup, powerups.Invis) and powerup.activated:
                 powerups.Powerup.powerupTimer += 1
-                # disable powerup after 10 seconds
-                if powerups.Powerup.powerupTimer > 100:
+                # disable powerup after 5 seconds
+                if powerups.Powerup.powerupTimer > 2.5*app.stepsPerSecond:
+                    app.powerups.remove(powerup)
+                    powerup.activated = False
+            elif isinstance(powerup, powerups.Magnet) and powerup.activated:
+                powerups.Powerup.powerupTimer += 1
+                # disable powerup after 5 seconds
+                if powerups.Powerup.powerupTimer > 2.5*app.stepsPerSecond:
                     app.powerups.remove(powerup)
                     powerup.activated = False
     # when game started but paused
@@ -110,13 +121,17 @@ def onStep(app):
             # run spinner for 10 sec.
             powerups.spinSpinner(app)
             powerups.Powerup.spinTimer += 1
-            if powerups.Powerup.spinTimer > 100:
+            if powerups.Powerup.spinTimer > 5*app.stepsPerSecond:
                 app.spinning = False
                 powerups.addPowerup(app)
     elif not app.gameStarted:
         music.emeraldCity.play(loop = True)
 
 def onKeyPress(app, key):
+    if not app.gameStarted and key == 't':
+        app.heldGems = 3
+        app.powerups = [powerups.WallWalk(), powerups.Invis(), powerups.Magnet()]
+        app.characters.append(images.guyDanger)
     # call onKeyPress of MainChar class
     if not app.gameOver and not app.paused and not app.showInstructions:
         app.mainChar.onKeyPress(key)
@@ -170,6 +185,11 @@ def onMousePress(app, mx, my):
                 indx = powerups.findPowerup(powerups.Invis)
                 app.powerups[indx].engagePowerup()
                 powerups.Powerup.powerupTimer = 0
+            if app.magnetPowerup.pressButton(mx, my) and powerups.Magnet.count > 0:
+                powerups.Magnet.count -= 1
+                indx = powerups.findPowerup(powerups.Magnet)
+                app.powerups[indx].engagePowerup()
+                powerups.Powerup.powerupTimer = 0 
         if app.pause.pressButton(mx, my):
             app.paused = not app.paused
             messages = ["Wow...already taking a break...", "You're lazier than I thought...",
@@ -231,6 +251,8 @@ def redrawAll(app):
                 app.gem.draw()
         if not app.characterMenu:
             guides.drawInGame(app)
+        if app.maxWeightMsg:
+            guides.drawMaxWeightMsg(app)
 
 def main():
     runApp()
