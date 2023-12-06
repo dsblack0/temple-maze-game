@@ -90,7 +90,7 @@ def onStep(app):
             artifact.posX, artifact.posY = app.mainChar.posX, app.mainChar.posY
         if app.maxWeightMsg:
             app.weightMsgTimer += 1
-            if app.weightMsgTimer > app.stepsPerSecond:
+            if app.weightMsgTimer > 5:
                 app.maxWeightMsg = False
         for powerup in app.powerups:
             if isinstance(powerup, powerups.WallWalk) and powerup.activated:
