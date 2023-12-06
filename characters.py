@@ -50,9 +50,7 @@ class Character:
         if (isinstance(self, MainChar) and
             (indx != -1) and (app.powerups[indx].activated)):
                 # if WallWalk powerup active, MainChar can move anywhere on grid
-                if ((not (0<=self.row<app.grid.rows) and (0<=self.col<app.grid.cols) or
-                      (self.posX>app.grid.left + app.grid.width - cellW) 
-                      or (self.posY>app.grid.top + app.grid.height - cellH))):
+                if (not ((0<=self.row<app.grid.rows) and (0<=self.col<app.grid.cols))):
                     self.posX, self.posY = ogLocation
         else:
             # check if char position doesn't overlap any walls
@@ -61,13 +59,13 @@ class Character:
                 if maze.doOverlap(app, self.posX, self.posY, wallX, wallY):
                     self.posX, self.posY = ogLocation
                     break   
-        self.updateRowCol()
-        # check if new row & col are validLocation for character type
-        if (((self.row, self.col) not in self.validLocations()) or
-            (self.posX>app.grid.left + app.grid.width - cellW) or 
-            (self.posY>app.grid.top + app.grid.height - cellH)):
-            self.posX, self.posY = ogLocation
             self.updateRowCol()
+            # check if new row & col are validLocation for character type
+            if (((self.row, self.col) not in self.validLocations()) or
+                (self.posX>app.grid.left + app.grid.width - cellW) or 
+                (self.posY>app.grid.top + app.grid.height - cellH)):
+                self.posX, self.posY = ogLocation
+                self.updateRowCol()
     
     def draw(self):
         drawImage(self.image, self.posX, self.posY, align='top-left',
