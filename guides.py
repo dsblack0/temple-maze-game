@@ -62,11 +62,11 @@ def drawInstructions(app):
     drawRect(0, app.height/5, app.width, app.height, fill='saddleBrown')
     drawLabel('Instructions', app.width/2, app.height/4, 
               fill='tan', size=50, bold=True, font='monospace')
-    drawLabel('You have joined a group of temple robbers in their mission to steel artifacts from ancient temples.',
+    drawLabel('You have joined a group of temple robbers in their mission to steal artifacts from ancient temples.',
               app.width/2, app.height/4+50, fill='tan', size=18)
     drawLabel('Go forth on your solo adventure through the temple maze, in search of these priceless artifacts.',
               app.width/2, app.height/4+70, fill='tan', size=18)
-    drawLabel("As you run, BEWARE the monster! You're a crunchy human...",
+    drawLabel("As you run, BEWARE the monsters! You're a crunchy human...",
               app.width/2, app.height/4+90, fill='tan', size=18)
     drawLabel('They will be looking for every chance to eat you when you least expect it.',
               app.width/2, app.height/4+110, fill='tan', size=18)
