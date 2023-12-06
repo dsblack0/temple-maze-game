@@ -103,8 +103,8 @@ class MainChar(Character):
                 app.droppedWeight += artifactWeight
                 app.heldWeight -= artifactWeight
                 # increment score for every 10 weights
-                if app.droppedWeight >= 10:
-                    app.droppedWeight -= 10
+                if app.droppedWeight >= 5:
+                    app.droppedWeight -= 5
                     app.score += 1
             elif (app.gem and maze.doOverlap(app, self.posX, self.posY, 
                                              app.gem.posX, app.gem.posY)):
