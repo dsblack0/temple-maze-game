@@ -41,7 +41,6 @@ def restartGame(app):
 
     app.gameStarted = True
     app.grid = maze.Grid()
-    app.validLocations = characters.Character.validLocations()
     app.mainChar = characters.MainChar(0, 0)
     app.monsters = characters.generateMonsters(2)
     app.placedArtifacts = characters.generateArtifacts(3)
